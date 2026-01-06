@@ -1,0 +1,6 @@
+Book title is: Mobi Dick, Author is: Herman Melville, ISBN is: U90288498PP, published in: 1851Availability: true
+
+Book title is: One Piece, Author is: Eichiro Oda, ISBN is: Y737471IP, published in: 1995Availability: true
+
+Book title is: Naruto, Author is: Masashi Kishimoto, ISBN is: 1998, published in: 1995Availability: true
+
