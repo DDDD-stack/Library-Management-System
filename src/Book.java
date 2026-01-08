@@ -70,27 +70,8 @@ public class Book {
         this.available = available;
     }
 
-    //Turn toString into an Object-------
-    public static Book fromString(String line){
-        String[] data = line.split(", ");
-
-        return new Book(
-                data[0],
-                data[1],
-                data[2],
-                data[3],
-                Integer.parseInt(data[4]),
-                Boolean.parseBoolean(data[5])
-        );
-    }
-
-    //Display the search results----------
-    public String display(){
-        return "Title: " + title + "\nAuthor: " + author + "\nGenre: " + genre + "\nISBN: " + ISBN + "\nPublication Year: " + publicationYear + "\nAvailable: " + available;
-    }
-
     @Override
     public String toString(){
-        return "Book title is: " + title + ", Author is: " + author + ", ISBN is: "+ ISBN + ", published in: " + publicationYear + "Availability: " + available + "\n";
+        return "Book title is: " + title + ", Author is: " + author + ", ISBN is: "+ ISBN + " Genre: " + genre + ", Published in: " + publicationYear + " Availability: " + available + "\n";
     }
 }

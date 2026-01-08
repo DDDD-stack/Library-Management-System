@@ -8,31 +8,36 @@ import java.io.File;
 
 public class ConsoleUI {
 
-    //Search method--------------
-    public static Book searchBook(String title){
-        try(BufferedReader br = new BufferedReader(new FileReader("books.txt"))){
-            String line;
-
-            while ((line = br.readLine()) != null){
-                Book book = Book.fromString(line);
-
-                if (book.getTitle().equals(title)) {
-                    return book;
-                }
-            }
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     public void ConsoleUI(){
 
         Scanner sc = new Scanner(System.in);
 
-        loop:
+        LogIn:
         while(true){
-            System.out.println("Welcome to the APP!");
+            System.out.println("Welcome to the App! Please Log In!");
+            System.out.println("Enter username or email: ");
+            String username = sc.nextLine();
+            System.out.println("Enter password: ");
+            String password = sc.nextLine();
+
+            try(BufferedReader reader = new BufferedReader(new FileReader("users.txt"))){
+                String line;
+                while((line = reader.readLine()) != null){
+                    if (line.contains(username) && line.contains(password)){
+                        System.out.println("Welcome!");
+                        break LogIn;
+                    }else {
+                        System.out.println("Invalid credentials!");
+                    }
+                }
+
+            }catch(IOException e){
+                System.out.println("File not found: " + e.getMessage());
+            }
+        }
+
+        loopApp:
+        while(true){
             System.out.println("1. Add Book");
             System.out.println("2. Borrow Book");
             System.out.println("3. Register as a user");
@@ -117,19 +122,82 @@ public class ConsoleUI {
                     break;
 
                 case 4: //Filter -----------------
-                    System.out.println("Filtered Books!");
+                    System.out.println("1. Filter by gender");
+                    System.out.println("2. Filter by year");
+                    int filter = sc.nextInt();
+                    sc.nextLine();
+
+                    switch(filter){
+                        case 1://Filter by gender--------------------
+                            System.out.println("Enter genre: ");
+                            String filterByGenre = sc.nextLine();
+
+                            try(BufferedReader reader = new BufferedReader(new FileReader("books.txt"))){
+                                String line;
+                                while((line = reader.readLine()) != null){
+                                    for(int i = 0; i <= line.length() - filterByGenre.length(); i++){
+                                        if(line.regionMatches(true, i, filterByGenre, 0, filterByGenre.length())){
+                                            System.out.println(line);
+                                        }
+                                    }
+                                }
+                            }catch(IOException e){
+                                System.out.println("File not found: " + e.getMessage());
+                            }
+                            break;
+
+                        case 2://Filter by year published-------------------
+                            System.out.println("Enter year range: ");
+                            int yearRange1 = sc.nextInt();
+                            sc.nextLine();
+                            int yearRange2 = sc.nextInt();
+                            sc.nextLine();
+
+                            try(BufferedReader reader = new BufferedReader(new FileReader("books.txt"))){
+                                String line;
+
+                                while((line = reader.readLine()) != null) {
+                                    for (int i = yearRange1; i <= yearRange2; i++) {
+                                        if (line.contains("published in: " + i)) {
+                                            System.out.println(line);
+                                        }
+                                    }
+                                }
+                            }catch(IOException e){
+                                System.out.println("File not found: " + e.getMessage());
+                            }
+                            break;
+                        default:
+                            System.out.println("Invalid choice!");
+                            break;
+                    }
                     break;
+
                 case 5: //Search book ---------------------
                     System.out.println("Enter the book title: ");
                     String search = sc.nextLine();
 
-                    Book result = searchBook(search);
-
-                    System.out.println("THe results: " + result);
+                    try(BufferedReader reader = new BufferedReader(new FileReader("books.txt"))){
+                        String line;
+                        while((line = reader.readLine()) != null){
+                            for(int i = 0; i <= line.length() - search.length(); i++){
+                                if(line.regionMatches(true, i, search, 0, search.length())){
+                                    System.out.println(line);
+                                    break;
+                                }
+                            }
+                        }
+                    }catch(IOException e){
+                        System.out.println("File not found: " + e.getMessage());
+                    }
                     break;
                 case 6: //Exit loop
                     System.out.println("Bye!");
-                    break loop;
+                    break loopApp;
+
+                default:
+                    System.out.println("Invalid choice!");
+                    break;
             }
         }
     }
