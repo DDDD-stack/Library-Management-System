@@ -11,35 +11,14 @@ public class ConsoleUI {
     public void ConsoleUI(){
 
         Scanner sc = new Scanner(System.in);
-
-        LogIn:
-        while(true){
-            System.out.println("Welcome to the App! Please Log In!");
-            System.out.println("Enter username or email: ");
-            String username = sc.nextLine();
-            System.out.println("Enter password: ");
-            String password = sc.nextLine();
-
-            try(BufferedReader reader = new BufferedReader(new FileReader("users.txt"))){
-                String line;
-                while((line = reader.readLine()) != null){
-                    if (line.contains(username) && line.contains(password)){
-                        System.out.println("Welcome!");
-                        break LogIn;
-                    }else {
-                        System.out.println("Invalid credentials!");
-                    }
-                }
-
-            }catch(IOException e){
-                System.out.println("File not found: " + e.getMessage());
-            }
-        }
+        Employee eConst = new Employee();
 
         loopApp:
         while(true){
             System.out.println("1. Add Book");
             System.out.println("2. Borrow Book");
+            System.out.println("3. Return Book");
+            System.out.println("4. Log In");
             System.out.println("3. Register as a user");
             System.out.println("4. Filter");
             System.out.println("5. Search for book");
@@ -51,7 +30,6 @@ public class ConsoleUI {
 
             switch(choice){
                 case 1: //Add books ---------------------
-
                     System.out.println("Enter Book Title: ");
                     String title = sc.nextLine();
 
@@ -67,14 +45,7 @@ public class ConsoleUI {
                     System.out.println("Enter Publication Year: ");
                     int year = sc.nextInt();
 
-                    Book book = new Book(title, author, genre, ISBN, year, true);
-
-                    try(BufferedWriter fw = new BufferedWriter(new FileWriter("books.txt", true))){
-                        fw.write(book.toString() + "\n");
-                        fw.close();
-                    }catch(IOException e){
-                        System.out.println("File not found: " + e.getMessage());
-                    }
+                    eConst.addBook(title, author, genre, ISBN, year);
                     break;
                 case 2: //Borrow book --------------------
                     System.out.println("Borrowed Book!");
@@ -82,44 +53,89 @@ public class ConsoleUI {
 
                 case 3: //Register user --------------------
 
-                    boolean usernameTaken = false;
-                    System.out.println("Enter your Username: ");
-                    String username = sc.nextLine();
+                    System.out.println("1. Register as a user");
+                    System.out.println("2. Register as an Employee");
+                    System.out.println("Enter your choice: ");
+                    int choice2 = sc.nextInt();
+                    sc.nextLine();
 
-                    System.out.println("Enter your Password: ");
-                    String password = sc.nextLine();
+                    switch(choice2){
+                        case 1:
+                            boolean usernameTaken = false;
+                            System.out.println("Enter your Username: ");
+                            String username = sc.nextLine();
 
-                    System.out.println("Enter your Email: ");
-                    String email = sc.nextLine();
+                            System.out.println("Enter your Password: ");
+                            String password = sc.nextLine();
 
-                    try(BufferedReader reader = new BufferedReader(new FileReader("users.txt"))){
-                        String line;
+                            System.out.println("Enter your Email: ");
+                            String email = sc.nextLine();
 
-                        while((line = reader.readLine()) != null){
-                            if (line.contains(username)) {
-                                usernameTaken = true;
-                                break;
+                            try(BufferedReader reader = new BufferedReader(new FileReader("users.txt"))){
+                                String line;
+
+                                while((line = reader.readLine()) != null){
+                                    if (line.contains(username)) {
+                                        usernameTaken = true;
+                                        break;
+                                    }
+                                }
+                            }catch(IOException e){
+                                System.out.println("File not found: " + e.getMessage());
                             }
-                        }
-                    }catch(IOException e){
-                        System.out.println("File not found: " + e.getMessage());
+
+                            if(usernameTaken){
+                                System.out.println("Username already taken!\n");
+                            }else{
+                                User user = new User(username, password, email);
+
+                                try(BufferedWriter writer = new BufferedWriter(new FileWriter("users.txt"))){
+                                    writer.write(user.toString() + "\n");
+                                    writer.newLine();
+                                    System.out.println(user.toString() + "\n");
+
+                                }catch(IOException e){
+                                    System.out.println("File not found: " + e.getMessage());
+                                }
+
+                                File file = new File(username + ".txt");
+                            }
+                            break;
+                        case 2:
+                            boolean employeeIDTaken = false;
+                            System.out.println("Enter employee Name: ");
+                            String employeeName = sc.nextLine();
+                            System.out.println("Enter employee ID: ");
+                            String employeeID = sc.nextLine();
+
+                            try(BufferedReader br = new BufferedReader(new FileReader("employees.txt"))){
+                                String line;
+                                while((line = br.readLine()) != null){
+                                    if(line.contains(employeeID)){
+                                        employeeIDTaken = true;
+                                        break;
+                                    }
+                                }
+
+                            }catch(IOException e){
+                                System.out.println("File not found: " + e.getMessage());
+                            }
+
+                            if(employeeIDTaken){
+                                System.out.println("Employee ID already registered!");
+                            }else{
+                                Employee employee = new Employee(employeeName, employeeID);
+
+                                try(BufferedWriter br = new BufferedWriter(new FileWriter("employees.txt"))){
+
+                                    br.write(employee.toString() + "\n");
+                                    br.newLine();
+
+                                }catch(IOException e){
+                                    System.out.println("File not found: " + e.getMessage());
+                                }
+                            }
                     }
-
-                    if(usernameTaken){
-                        System.out.println("Username already taken!\n");
-                    }else{
-                        User user = new User(username, password, email);
-
-                        try(BufferedWriter writer = new BufferedWriter(new FileWriter("users.txt"))){
-                            writer.write(user.toString() + "\n");
-                            writer.newLine();
-                            System.out.println(user.toString() + "\n");
-
-                        }catch(IOException e){
-                            System.out.println("File not found: " + e.getMessage());
-                        }
-                    }
-                    break;
 
                 case 4: //Filter -----------------
                     System.out.println("1. Filter by gender");
