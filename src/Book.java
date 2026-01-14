@@ -9,6 +9,18 @@ public class Book {
     //Constructors--------------
     public Book(){
 
+        /*
+        Filter method
+
+
+
+
+        */
+
+
+
+
+
     }
 
     public Book(String title, String author, String genre, String ISBN, int publicationYear, boolean available){

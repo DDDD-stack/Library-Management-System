@@ -9,6 +9,19 @@ public class User {
     private String password;
     private String email;
 
+
+
+    /*
+    borrow method
+    return method
+
+
+
+
+    */
+
+
+
     //Constructors---------
     public User(){};
 

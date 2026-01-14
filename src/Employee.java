@@ -3,29 +3,33 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class Employee {
-    private String employeeName;
+public class Employee extends User{
     private String employeeID;
+
+    /*
+    Fine method
+Add book method
+     */
+
+
+
+
+
 
     public Employee(){
     }
 
-    public Employee(String employeeName, String employeeID){
-        this.employeeName = employeeName;
+    public Employee(String employeeID,String userName, String password, String email){
+        super(userName,password,email);
         this.employeeID = employeeID;
     }
 
-    public String getEmployeeName(){
-        return employeeName;
-    }
 
     public String getEmployeeID(){
         return employeeID;
     }
 
-    public void setEmployeeName(String employeeName){
-        this.employeeName = employeeName;
-    }
+
 
     public void setEmployeeID(String employeeID){
         this.employeeID = employeeID;
@@ -45,6 +49,6 @@ public class Employee {
 
     @Override
     public String toString(){
-        return "Employee Name: " + employeeName + ", Employee ID: " + employeeID;
+        return "Employee ID: " + employeeID + " Username: " + getUserName() + " Password: "+ getPassword() + " Email: " + getEmail();
     }
 }

@@ -14,22 +14,32 @@ public class ConsoleUI {
         Employee eConst = new Employee();
 
         loopApp:
+
+        //    Menu ----------------------
+
+        //Keep the login the same but make special id for employ and user EX: Userid: U1,U2.....   EmployeeID: E1,E2.......
+
         while(true){
             System.out.println("1. Add Book");
             System.out.println("2. Borrow Book");
-            System.out.println("3. Return Book");
-            System.out.println("4. Log In");
-            System.out.println("3. Register as a user");
-            System.out.println("4. Filter");
-            System.out.println("5. Search for book");
-            System.out.println("6. Exit");
+            System.out.println("3. Return Book");  //missing
+            System.out.println("4. Log In");       //missing
+            System.out.println("5. Register as a user");
+            System.out.println("6. Filter");
+            System.out.println("7. Search for book");
+            System.out.println("8. Exit");
 
             System.out.println("Enter your choice: ");
             int choice = sc.nextInt();
             sc.nextLine();
 
             switch(choice){
-                case 1: //Add books ---------------------
+
+
+                //    Add books ------------------
+
+
+                case 1:
                     System.out.println("Enter Book Title: ");
                     String title = sc.nextLine();
 
@@ -47,11 +57,17 @@ public class ConsoleUI {
 
                     eConst.addBook(title, author, genre, ISBN, year);
                     break;
-                case 2: //Borrow book --------------------
+
+                //  Borrow book -----------------
+
+                case 2:
                     System.out.println("Borrowed Book!");
                     break;
 
-                case 3: //Register user --------------------
+
+                //  Register user ----------------
+
+                case 5:
 
                     System.out.println("1. Register as a user");
                     System.out.println("2. Register as an Employee");
@@ -59,7 +75,15 @@ public class ConsoleUI {
                     int choice2 = sc.nextInt();
                     sc.nextLine();
 
+
+                    // Register Menu----------
+
                     switch(choice2){
+
+
+
+                        //  Registration as user----------
+
                         case 1:
                             boolean usernameTaken = false;
                             System.out.println("Enter your Username: ");
@@ -70,6 +94,11 @@ public class ConsoleUI {
 
                             System.out.println("Enter your Email: ");
                             String email = sc.nextLine();
+
+
+                            //Check if the username is already taken
+                            //Update :  upload the books in an array list and upload
+                            //Make it a method
 
                             try(BufferedReader reader = new BufferedReader(new FileReader("users.txt"))){
                                 String line;
@@ -84,10 +113,16 @@ public class ConsoleUI {
                                 System.out.println("File not found: " + e.getMessage());
                             }
 
+
                             if(usernameTaken){
                                 System.out.println("Username already taken!\n");
                             }else{
                                 User user = new User(username, password, email);
+
+
+
+                                //Write the  new user information on file
+
 
                                 try(BufferedWriter writer = new BufferedWriter(new FileWriter("users.txt"))){
                                     writer.write(user.toString() + "\n");
@@ -101,12 +136,26 @@ public class ConsoleUI {
                                 File file = new File(username + ".txt");
                             }
                             break;
+
+
+
+                            //Register as an Employee option
+
+
                         case 2:
                             boolean employeeIDTaken = false;
                             System.out.println("Enter employee Name: ");
-                            String employeeName = sc.nextLine();
+                            String userName = sc.nextLine();
                             System.out.println("Enter employee ID: ");
                             String employeeID = sc.nextLine();
+
+
+
+
+                            //Check if the employee id is taken
+                            //Update : upload the books in an array list and upload
+                            //Make it a method
+
 
                             try(BufferedReader br = new BufferedReader(new FileReader("employees.txt"))){
                                 String line;
@@ -124,9 +173,14 @@ public class ConsoleUI {
                             if(employeeIDTaken){
                                 System.out.println("Employee ID already registered!");
                             }else{
-                                Employee employee = new Employee(employeeName, employeeID);
+                                Employee employee = new Employee(employeeID,userName,password,email);
 
-                                try(BufferedWriter br = new BufferedWriter(new FileWriter("employees.txt"))){
+
+
+                                //Write the new employee information on files
+
+
+                                try(BufferedWriter br = new BufferedWriter(new FileWriter("employees.txt",true))){
 
                                     br.write(employee.toString() + "\n");
                                     br.newLine();
@@ -137,16 +191,31 @@ public class ConsoleUI {
                             }
                     }
 
-                case 4: //Filter -----------------
+
+
+                    //Filter -----------------
+
+
+                case 6:
                     System.out.println("1. Filter by gender");
                     System.out.println("2. Filter by year");
                     int filter = sc.nextInt();
                     sc.nextLine();
 
                     switch(filter){
-                        case 1://Filter by gender--------------------
+
+                        //Filter by gender--------------------
+
+                        case 1:
                             System.out.println("Enter genre: ");
                             String filterByGenre = sc.nextLine();
+
+
+
+
+                            //Update : upload the books in an array list and upload
+                            //Make it a method
+
 
                             try(BufferedReader reader = new BufferedReader(new FileReader("books.txt"))){
                                 String line;
@@ -162,12 +231,22 @@ public class ConsoleUI {
                             }
                             break;
 
-                        case 2://Filter by year published-------------------
+
+
+                        //Filter by year published----------------
+
+
+                        case 2:
                             System.out.println("Enter year range: ");
                             int yearRange1 = sc.nextInt();
                             sc.nextLine();
                             int yearRange2 = sc.nextInt();
                             sc.nextLine();
+
+
+                            //Update :  upload the books in an array list and upload
+                            //Make it a method
+
 
                             try(BufferedReader reader = new BufferedReader(new FileReader("books.txt"))){
                                 String line;
@@ -189,9 +268,18 @@ public class ConsoleUI {
                     }
                     break;
 
-                case 5: //Search book ---------------------
+
+
+                //Search book ---------------------
+
+
+                case 7:
                     System.out.println("Enter the book title: ");
                     String search = sc.nextLine();
+
+
+                    //Read file to find the wanted book
+
 
                     try(BufferedReader reader = new BufferedReader(new FileReader("books.txt"))){
                         String line;
@@ -207,7 +295,12 @@ public class ConsoleUI {
                         System.out.println("File not found: " + e.getMessage());
                     }
                     break;
-                case 6: //Exit loop
+
+
+                //Exit loop
+
+
+                case 8:
                     System.out.println("Bye!");
                     break loopApp;
 
