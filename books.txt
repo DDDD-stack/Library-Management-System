@@ -5,3 +5,6 @@ Book title is: One Piece, Author is: Eichiro Oda, ISBN is: Y737471IP, Genre: Man
 Book title is: Naruto, Author is: Masashi Kishimoto, ISBN is: 1998, Genre: Manga, published in: 1995 Availability: true
 
 Book title is: Mobi Dick, Author is: Nana, ISBN is: P097IU, Genre: Fantasy, published in: 1889 Availability: true
+
+Book title is: New Dawn, Author is: Robert, ISBN is: P79076I Genre: Romance, Published in: 2025 Availability: true
+

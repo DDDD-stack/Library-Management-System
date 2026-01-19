@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.Scanner;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -11,7 +12,8 @@ public class ConsoleUI {
     public void ConsoleUI(){
 
         Scanner sc = new Scanner(System.in);
-        Employee eConst = new Employee();
+        Employee employeeConstructor = new Employee();
+        Book bookConstructor = new Book();
 
         loopApp:
 
@@ -55,13 +57,25 @@ public class ConsoleUI {
                     System.out.println("Enter Publication Year: ");
                     int year = sc.nextInt();
 
-                    eConst.addBook(title, author, genre, ISBN, year);
+                    employeeConstructor.addBook(title, author, genre, ISBN, year);
                     break;
 
                 //  Borrow book -----------------
 
                 case 2:
-                    System.out.println("Borrowed Book!");
+                    System.out.println("Enter User Name: ");
+                    String name = sc.nextLine();
+                    System.out.println("Enter Book title: ");
+                    String bookTitle = sc.nextLine();
+                    System.out.println("Enter Book Author: ");
+                    String bookAuthor = sc.nextLine();
+                    System.out.println("Enter the amount of days you want to borrow the book: ");
+                    int nrOfDays = sc.nextInt();
+                    sc.nextLine();
+                    LocalDate borrowDate = LocalDate.now();
+
+                    bookConstructor.borrowBook(name, bookTitle, bookAuthor, borrowDate, nrOfDays);
+
                     break;
 
 
@@ -100,42 +114,42 @@ public class ConsoleUI {
                             //Update :  upload the books in an array list and upload
                             //Make it a method
 
-                            try(BufferedReader reader = new BufferedReader(new FileReader("users.txt"))){
-                                String line;
-
-                                while((line = reader.readLine()) != null){
-                                    if (line.contains(username)) {
-                                        usernameTaken = true;
-                                        break;
-                                    }
-                                }
-                            }catch(IOException e){
-                                System.out.println("File not found: " + e.getMessage());
-                            }
-
-
-                            if(usernameTaken){
-                                System.out.println("Username already taken!\n");
-                            }else{
-                                User user = new User(username, password, email);
-
-
-
-                                //Write the  new user information on file
-
-
-                                try(BufferedWriter writer = new BufferedWriter(new FileWriter("users.txt"))){
-                                    writer.write(user.toString() + "\n");
-                                    writer.newLine();
-                                    System.out.println(user.toString() + "\n");
-
-                                }catch(IOException e){
-                                    System.out.println("File not found: " + e.getMessage());
-                                }
-
-                                File file = new File(username + ".txt");
-                            }
-                            break;
+//                            try(BufferedReader reader = new BufferedReader(new FileReader("users.txt"))){
+//                                String line;
+//
+//                                while((line = reader.readLine()) != null){
+//                                    if (line.contains(username)) {
+//                                        usernameTaken = true;
+//                                        break;
+//                                    }
+//                                }
+//                            }catch(IOException e){
+//                                System.out.println("File not found: " + e.getMessage());
+//                            }
+//
+//
+//                            if(usernameTaken){
+//                                System.out.println("Username already taken!\n");
+//                            }else{
+//                                User user = new User(username, password, email);
+//
+//
+//
+//                                //Write the  new user information on file
+//
+//
+//                                try(BufferedWriter writer = new BufferedWriter(new FileWriter("users.txt"))){
+//                                    writer.write(user.toString() + "\n");
+//                                    writer.newLine();
+//                                    System.out.println(user.toString() + "\n");
+//
+//                                }catch(IOException e){
+//                                    System.out.println("File not found: " + e.getMessage());
+//                                }
+//
+//                                File file = new File(username + ".txt");
+//                            }
+//                            break;
 
 
 
@@ -148,6 +162,10 @@ public class ConsoleUI {
                             String userName = sc.nextLine();
                             System.out.println("Enter employee ID: ");
                             String employeeID = sc.nextLine();
+                            System.out.println("Enter password: ");
+                            String pass = sc.nextLine();
+                            System.out.println("Enter email: ");
+                            String mail = sc.nextLine();
 
 
 
@@ -173,7 +191,7 @@ public class ConsoleUI {
                             if(employeeIDTaken){
                                 System.out.println("Employee ID already registered!");
                             }else{
-                                Employee employee = new Employee(employeeID,userName,password,email);
+                                Employee employee = new Employee(employeeID,userName,pass,mail);
 
 
 

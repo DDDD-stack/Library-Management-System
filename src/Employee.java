@@ -40,7 +40,8 @@ Add book method
         Book book = new Book(title, author, genre, ISBN, year, true);
 
         try(BufferedWriter fw = new BufferedWriter(new FileWriter("books.txt", true))){
-            fw.write(book.toString() + "\n");
+            fw.write(book.toString());
+            fw.write("\n");
             fw.close();
         }catch(IOException e){
             System.out.println("File not found: " + e.getMessage());
