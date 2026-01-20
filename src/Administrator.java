@@ -1,10 +1,10 @@
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Scanner;
 
-public class Employee extends User{
-    private String employeeID;
+public class Administrator extends User{
+    private String adminID;
+    private String adminPass = "admin123";
 
     /*
     Fine method
@@ -16,23 +16,31 @@ Add book method
 
 
 
-    public Employee(){
+    public Administrator(){
     }
 
-    public Employee(String employeeID,String userName, String password, String email){
+    public Administrator(String userName, String password, String email, String adminID){
         super(userName,password,email);
-        this.employeeID = employeeID;
+        this.adminID = adminID;
     }
 
 
-    public String getEmployeeID(){
-        return employeeID;
+    public String getAdminID(){
+        return adminID;
+    }
+
+    public String getAdminPass(){
+        return adminPass;
     }
 
 
 
-    public void setEmployeeID(String employeeID){
-        this.employeeID = employeeID;
+    public void setAdminID(String employeeID){
+        this.adminID = employeeID;
+    }
+
+    public void setAdminPass(String password){
+        this.adminPass = password;
     }
 
     public void addBook(String title, String author, String genre, String ISBN, int year){
@@ -41,7 +49,9 @@ Add book method
 
         try(BufferedWriter fw = new BufferedWriter(new FileWriter("books.txt", true))){
             fw.write(book.toString());
+
             fw.write("\n");
+
             fw.close();
         }catch(IOException e){
             System.out.println("File not found: " + e.getMessage());
@@ -50,6 +60,6 @@ Add book method
 
     @Override
     public String toString(){
-        return "Employee ID: " + employeeID + " Username: " + getUserName() + " Password: "+ getPassword() + " Email: " + getEmail();
+        return super.toString() + " Status: Admin " + " Admin ID: " + adminID;
     }
 }

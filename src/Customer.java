@@ -18,7 +18,6 @@ public class Customer extends User{
         return customerID;
     }
 
-
                                                                                             //Setters-------------------
 
     public void setCustomerID(String customerID){
@@ -27,7 +26,7 @@ public class Customer extends User{
 
     @Override
     public String toString(){
-        return super.toString() + " Customer ID: " + customerID;
+        return super.toString() + " Customer ID: " + customerID + " Status: Customer";
     }
 
 }

@@ -135,7 +135,7 @@ public class Book extends User{
 
         if(available == true){
             //Writing to file
-            try(BufferedWriter writer = new BufferedWriter(new FileWriter("Borrowed.txt"))){
+            try(BufferedWriter writer = new BufferedWriter(new FileWriter("borrowed.txt"))){
 
                 writer.write(borrowed.borrowString());
 

@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -5,6 +6,7 @@ import java.time.LocalDate;
 public class Main{
     public static void main(String[] args){
         ConsoleUI console = new ConsoleUI();
+        File file = new File("borrowed.txt");
 
         console.ConsoleUI();
 
@@ -14,12 +16,8 @@ public class Main{
 
         //Kontrolloji pak metodat per add edhe borrow edhe nese munesh ban 1 return method
 
-        //Tkam lan 1 problem ke ConsoleUI ngaqe bana User abstrakte u prish rregjistrimi
-
         //Momentalisht duhet me rregullu kto para se me ba tjerat.
 
         //Edhe nmos tardht keq a munesh me e ba searching qe ti baj ignore case ke te tana si ke searchi i librave edhe ke validimi i metodave
-
-        //Ma bo hallall po ora 10 kam tash 2 or tu u marr me to e asht tum zan gjumi si qr
     }
 }
