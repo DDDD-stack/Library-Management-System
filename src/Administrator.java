@@ -22,6 +22,7 @@ Add book method
     public Administrator(String userName, String password, String email, String adminID){
         super(userName,password,email);
         this.adminID = adminID;
+        this.role = "Administrator";
     }
 
 
@@ -60,6 +61,6 @@ Add book method
 
     @Override
     public String toString(){
-        return super.toString() + " Status: Admin " + " Admin ID: " + adminID;
+        return super.toString() + "," + " Admin ID: " + adminID + "," + " Status: " + role;
     }
 }

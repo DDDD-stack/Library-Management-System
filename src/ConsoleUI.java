@@ -8,6 +8,7 @@ public class ConsoleUI {
     public void ConsoleUI(){
 
         Scanner sc = new Scanner(System.in);
+        LogIn logIn = new LogIn();
         Administrator adminConstructor = new Administrator();
         Book bookConstructor = new Book();
 
@@ -21,11 +22,13 @@ public class ConsoleUI {
             System.out.println("1. Add Book");
             System.out.println("2. Borrow Book");
             System.out.println("3. Return Book");  //missing
-            System.out.println("4. Log In");       //missing
-            System.out.println("5. Register");
-            System.out.println("6. Filter");
-            System.out.println("7. Search for book");
-            System.out.println("8. Exit");
+            System.out.println("4. Log In");
+            System.out.println("5. Log Out");
+            System.out.println("6. Register");
+            System.out.println("7. Filter");
+            System.out.println("8. Search for book");
+            System.out.println("9. Show current user profile");
+            System.out.println("0. Exit");
 
             System.out.println("Enter your choice: ");
             int choice = sc.nextInt();
@@ -74,10 +77,29 @@ public class ConsoleUI {
 
                     break;
 
+                case 4:
+
+                    //User Log In------------------
+
+                    System.out.println("Enter User Name: ");
+                    String loginName = sc.nextLine();
+                    System.out.println("Enter Password: ");
+                    String loginPassword = sc.nextLine();
+
+                    logIn.LogIn(loginName, loginPassword);
+                    break;
+
+                case 5:
+
+                    //LogOut-------------------
+
+                    logIn.LogOut();
+
+
 
                 //  Register user ----------------
 
-                case 5:
+                case 6:
 
                     System.out.println("1. Register as a customer");
                     System.out.println("2. Register as an Administrator");
@@ -134,7 +156,7 @@ public class ConsoleUI {
                                 //Write the  new user information on file
 
 
-                                try(BufferedWriter writer = new BufferedWriter(new FileWriter("users.txt"))){
+                                try(BufferedWriter writer = new BufferedWriter(new FileWriter("users.txt", true))){
                                     writer.write(customer.toString() + "\n");
                                     writer.newLine();
                                     System.out.println(customer.toString() + "\n");
@@ -168,10 +190,11 @@ public class ConsoleUI {
 
                                 Administrator admin = new Administrator(userName, pass, mail, adminId);
 
-                                try(BufferedWriter br = new BufferedWriter(new FileWriter("admins.txt"))){
+                                try(BufferedWriter br = new BufferedWriter(new FileWriter("admins.txt", true))){
 
                                     br.write(admin.toString());
                                     br.newLine();
+                                    System.out.println(adminConstructor.toString() + "\n");
                                     br.close();
 
                                 }catch(IOException e){
@@ -184,10 +207,10 @@ public class ConsoleUI {
                             //Switch to administrator--------
 //                        case 3:
 //                            System.out.println("Enter admin password: ");
-//                            String adminPass = sc.nextLine();
+//                            String adminCheck = sc.nextLine();
 //
-//                            if(adminPass.equals("admin123")){
-//
+//                            if(adminCheck.equals(adminConstructor.getAdminPass())){
+//                                System.out.println();
 //                            }
 //
 //                            break;
@@ -200,7 +223,7 @@ public class ConsoleUI {
                     //Filter -----------------
 
 
-                case 6:
+                case 7:
                     System.out.println("1. Filter by gender");
                     System.out.println("2. Filter by year");
                     int filter = sc.nextInt();
@@ -277,7 +300,7 @@ public class ConsoleUI {
                 //Search book ---------------------
 
 
-                case 7:
+                case 8:
                     System.out.println("Enter the book title: ");
                     String search = sc.nextLine();
 
@@ -300,13 +323,19 @@ public class ConsoleUI {
                     }
                     break;
 
+                case 9:
+                    System.out.println(Main.currentUser);
+                    break;
+
 
                 //Exit loop
 
 
-                case 8:
-                    System.out.println("Bye!");
-                    break loopApp;
+                case 0:
+//                    System.out.println("Bye!");
+                    logIn.LogOut();
+                    break;
+
 
                 default:
                     System.out.println("Invalid choice!");

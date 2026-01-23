@@ -10,6 +10,7 @@ public class Customer extends User{
     public Customer(String userName, String password, String email, String customerID){ //Customer registration constructor
         super(userName, password, email);
         this.customerID = customerID;
+        this.role = "Customer";
     }
 
                                                                                             //Getters-------------------
@@ -26,7 +27,7 @@ public class Customer extends User{
 
     @Override
     public String toString(){
-        return super.toString() + " Customer ID: " + customerID + " Status: Customer";
+        return super.toString() + "," + " Customer ID: " + customerID + "," + " Status: " + role;
     }
 
 }

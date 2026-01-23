@@ -1,2 +1,4 @@
-Username: Denis, Password: Denis1234robi12, Email: drobi24@epoka.edu.al Customer ID: 2925123d-ee05-4079-bf84-242a398eff58 Status: Customer
+Denis, Denis1234robi12, drobi840@gmail.com, aee2fe6b-eec5-4d9c-9570-6b581110666b, Customer
+
+Orest,oresti123,oresti@gmail.com,c4d958a3-8c1c-4147-a485-fe989554025c,Customer
 

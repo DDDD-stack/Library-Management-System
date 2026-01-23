@@ -1,10 +1,4 @@
-Book title is: Mobi Dick, Author is: Herman Melville, ISBN is: U90288498PP, Genre: Fantasy, published in: 1851 Availability: true
+Book title is: Naruto, Author is: Masashi Kishimoto, ISBN is: U8293901P, Genre: Manga, Published in: 1998, Availability: true
 
-Book title is: One Piece, Author is: Eichiro Oda, ISBN is: Y737471IP, Genre: Manga, published in: 1995 Availability: true
-
-Book title is: Naruto, Author is: Masashi Kishimoto, ISBN is: 1998, Genre: Manga, published in: 1995 Availability: true
-
-Book title is: Mobi Dick, Author is: Nana, ISBN is: P097IU, Genre: Fantasy, published in: 1889 Availability: true
-
-Book title is: New Dawn, Author is: Robert, ISBN is: P79076I Genre: Romance, Published in: 2025 Availability: true
+Book title is: Mobi Dick, Author is: Someone, ISBN is: P982218I, Genre: Fantasy, Published in: 1886, Availability: true
 

@@ -157,6 +157,6 @@ public class Book extends User{
 
     @Override
     public String toString(){
-        return "Book title is: " + title + ", Author is: " + author + ", ISBN is: "+ ISBN + " Genre: " + genre + ", Published in: " + publicationYear + " Availability: " + available + "\n";
+        return "Book title is: " + title + "," + " Author is: " + author + "," + " ISBN is: " + ISBN + "," + " Genre: " + genre + "," + " Published in: " + publicationYear + "," + " Availability: " + available + "\n";
     }
 }

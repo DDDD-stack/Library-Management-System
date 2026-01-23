@@ -8,7 +8,7 @@ public abstract class User {
     protected String userName;
     protected String password;
     protected String email;
-    protected String status;
+    protected String role;
 
 
 
@@ -60,6 +60,6 @@ public abstract class User {
 
     @Override
     public String toString(){
-        return "Username: " + userName + " Password: " + password + " Email: " + email;
+        return "Username: " + userName + "," + " Password: " + password + "," + " Email: " + email;
     }
 }
