@@ -8,6 +8,7 @@ public class ConsoleUI {
     public void ConsoleUI(){
 
         Scanner sc = new Scanner(System.in);
+        UserRegistration user = new UserRegistration();
         LogIn logIn = new LogIn();
         Administrator adminConstructor = new Administrator();
         Book bookConstructor = new Book();
@@ -94,6 +95,7 @@ public class ConsoleUI {
                     //LogOut-------------------
 
                     logIn.LogOut();
+                    break;
 
 
 
@@ -117,56 +119,15 @@ public class ConsoleUI {
                         //  Registration as user----------
 
                         case 1:
-                            boolean usernameTaken = false;
-                            System.out.println("Enter your Username: ");
-                            String username = sc.nextLine();
+                            System.out.println("Enter User Name: ");
+                            String customerName = sc.nextLine();
+                            System.out.println("Enter Password: ");
+                            String customerPassword = sc.nextLine();
+                            System.out.println("Enter Email: ");
+                            String customerEmail = sc.nextLine();
 
-                            try(BufferedReader reader = new BufferedReader(new FileReader("users.txt"))){
-                                String line;
+                            user.registerCustomer(customerName, customerPassword, customerEmail);
 
-                                while((line = reader.readLine()) != null){
-                                    if (line.contains(username)) {
-                                        usernameTaken = true;
-                                        break;
-                                    }
-                                }
-                            }catch(IOException e){
-                                System.out.println("File not found: " + e.getMessage());
-                            }
-
-
-                            //Check if the username is already taken
-                            //Update :  upload the books in an array list and upload
-                            //Make it a method
-
-                            if(usernameTaken){
-                                System.out.println("Username already taken!\n");
-                            }else{
-                                System.out.println("Enter your Password: ");
-                                String password = sc.nextLine();
-
-                                System.out.println("Enter your Email: ");
-                                String email = sc.nextLine();
-
-                                String customerID = UUID.randomUUID().toString();
-
-                                Customer customer = new Customer(username, password, email, customerID);
-
-
-                                //Write the  new user information on file
-
-
-                                try(BufferedWriter writer = new BufferedWriter(new FileWriter("users.txt", true))){
-                                    writer.write(customer.toString() + "\n");
-                                    writer.newLine();
-                                    System.out.println(customer.toString() + "\n");
-
-                                }catch(IOException e){
-                                    System.out.println("File not found: " + e.getMessage());
-                                }
-
-//                                File file = new File(username + ".txt");
-                            }
                             break;
 
 
@@ -175,34 +136,24 @@ public class ConsoleUI {
 
 
                         case 2:
-                            boolean adminIDTaken = false;
                             System.out.println("Enter admin password: ");
                             String adminPass = sc.nextLine();
+                            user.checkAdminPass(adminPass);
 
-                            if(adminPass.equals(adminConstructor.getAdminPass())){
-                                System.out.println("Enter Administrator Name: ");
-                                String userName = sc.nextLine();
-                                System.out.println("Enter password: ");
-                                String pass = sc.nextLine();
-                                System.out.println("Enter email: ");
-                                String mail = sc.nextLine();
-                                String adminId = UUID.randomUUID().toString();
+                            if(user.getPassed() == true){
+                                System.out.println("Enter User Name: ");
+                                String adminName = sc.nextLine();
+                                System.out.println("Enter Password: ");
+                                String adminPassword = sc.nextLine();
+                                System.out.println("Enter Email: ");
+                                String adminEmail = sc.nextLine();
 
-                                Administrator admin = new Administrator(userName, pass, mail, adminId);
-
-                                try(BufferedWriter br = new BufferedWriter(new FileWriter("admins.txt", true))){
-
-                                    br.write(admin.toString());
-                                    br.newLine();
-                                    System.out.println(adminConstructor.toString() + "\n");
-                                    br.close();
-
-                                }catch(IOException e){
-                                    System.out.println("File not found: " + e.getMessage());
-                                }
-                            }else{
-                                System.out.println("Admin Password Mismatch!\n");
+                                user.registerAdmin(adminName, adminPassword, adminEmail);
                             }
+
+                            break;
+
+
 
                             //Switch to administrator--------
 //                        case 3:
@@ -332,9 +283,8 @@ public class ConsoleUI {
 
 
                 case 0:
-//                    System.out.println("Bye!");
-                    logIn.LogOut();
-                    break;
+                    System.out.println("Bye!");
+                    break loopApp;
 
 
                 default:

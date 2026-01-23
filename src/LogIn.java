@@ -3,6 +3,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class LogIn {
+
     public LogIn(){}
 
                                                                                             //LogIn method---------------
@@ -11,7 +12,7 @@ public class LogIn {
         boolean found = false; //will be used as verification if the user is found or not
 
         //Check the users file--------
-        try(BufferedReader br = new BufferedReader(new FileReader("users.txt"))){
+        try(BufferedReader br = new BufferedReader(new FileReader("customers.txt"))){
             String line;
 
             while((line = br.readLine()) != null){

@@ -1,1 +1,1 @@
-Erald, esaraci, esaraci24@epoka.edu.al, 4e159b1e-effd-416b-8a1b-0f5ee402caf9, Administrator
+Username: Erald, Password: esaraci, Email: esaraci@gmail.com, Admin ID: c6304af0-2ee1-41ed-adf2-7d96c413982a, Status: Administrator
