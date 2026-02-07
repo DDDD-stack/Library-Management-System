@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 public class Book extends User{
@@ -17,7 +18,8 @@ public class Book extends User{
     private LocalDate returnDate;
 
                                                                                                                                     //Constructors--------------
-
+    ArrayList<String> lines = new ArrayList<>();
+    ArrayList<String> ulines = new ArrayList<>();
 
     public Book(){ //No-arg constructor
 
@@ -112,37 +114,36 @@ public class Book extends User{
         //Availability Validation and Update
         try(BufferedReader reader = new BufferedReader(new FileReader("books.txt"))){
             String line;
-            boolean available = false;
+             available = false;
 
             while((line = reader.readLine()) != null){
 
                 if(line.contains(title) && line.contains(author)){
-
                     if(line.contains("Availability: true")){
 
+                        line=line.replace("Availability: true", "Availability: false");
                         available = true;
-                        line.replace("Availability: true", "Availability: false");
 
                     }else if(line.contains("Availability: false")){
-
                         System.out.println("Book is not available!");
                     }
                 }
+                lines.add(line);
             }
         }catch(IOException e){
             e.getMessage();
         }
 
-        if(available == true){
+        if(isAvailable()){
             //Writing to file
-            try(BufferedWriter writer = new BufferedWriter(new FileWriter("borrowed.txt"))){
 
-                writer.write(borrowed.borrowString());
-
-                writer.write("\n");
-
-                writer.close();
-
+            try(BufferedWriter writer = new BufferedWriter(new FileWriter("books.txt"))){
+                for(String line : lines){
+                    writer.write(line);
+                    writer.newLine();
+                }
+                readForToBorrowList();
+                uploadToBorrowList();
             }catch(IOException e){
                 System.out.println("File not found!");
             }
@@ -159,4 +160,36 @@ public class Book extends User{
     public String toString(){
         return "Book title is: " + title + "," + " Author is: " + author + "," + " ISBN is: " + ISBN + "," + " Genre: " + genre + "," + " Published in: " + publicationYear + "," + " Availability: " + available + "\n";
     }
+
+
+    //Method to read the books file so it can find and save in the ArrayList all the books not available
+    public void readForToBorrowList(){
+        ulines.clear();     //to clear the arraylines when program stops to prevent duplication
+        try(BufferedReader reader = new BufferedReader(new FileReader("books.txt"))){
+            String line;
+
+            while((line = reader.readLine()) != null){
+                    if(line.contains("Availability: false")){
+                        ulines.add(line);
+                    }
+
+            }
+        }catch(IOException e){
+            e.getMessage();
+        }
+    }
+    //the books that aren't saved in the ulines are uploaded into the borrowed file
+    public void uploadToBorrowList(){
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter("borrowed.txt",true))){
+            for(String line : ulines){
+                writer.write(line);
+                writer.newLine();
+            }
+        }catch(IOException e){
+            System.out.println("File not found!");
+        }
+    }
 }
+
+
+

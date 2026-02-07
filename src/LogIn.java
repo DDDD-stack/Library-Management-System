@@ -25,9 +25,11 @@ public class LogIn {
 
                     //Create the cutomer constructor to use as the user
                     Main.currentUser = new Customer(parts[0], parts[1], parts[2], parts[3]);
-
-                    System.out.println("Logged in! Welcome back: " + parts[0]);
-                    break;
+                    for(int i=0;i< parts.length;i++) {
+                        String[] parts2 = parts[i].split(":");
+                        System.out.println("Logged in! Welcome back: "+ parts2[1].trim());
+                        break;
+                    }
 
                 }
             }
@@ -37,7 +39,7 @@ public class LogIn {
         }
 
         //If not found int the users file then check the admins file same steps apply here
-        if(found == false){
+        if(!found){
             try(BufferedReader br = new BufferedReader(new FileReader("admins.txt"))){
                 String line;
 
@@ -48,9 +50,11 @@ public class LogIn {
                         found = true;
 
                         Main.currentUser = new Customer(parts[0], parts[1], parts[2], parts[3]);
-
-                        System.out.println("Logged in! Welcome back: " + parts[0]);
-                        break;
+                        for(int i=0;i< parts.length;i++) {
+                              String[] parts2 = parts[i].split(":");
+                            System.out.println("Logged in! Welcome back: " + parts2[1].trim());
+                            break;
+                        }
                     }
                 }
             }catch(IOException e){
@@ -58,7 +62,7 @@ public class LogIn {
             }
         }
 
-        if(found == false){
+        if(!found){
             System.out.println("User not found!");
         }
 
