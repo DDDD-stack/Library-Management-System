@@ -59,10 +59,10 @@ int choice1;
                             switch (memChoice){
                                 case 1:
                                     memType = "Standard";
-
+                                    break;
                                 case 2:
                                     memType = "Premium";
-
+                                     break;
                                     default: {
                                         System.out.println("Invalid input!");
                                     memType="Standart";

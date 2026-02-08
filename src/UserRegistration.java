@@ -48,7 +48,7 @@ public class UserRegistration {
         }
     }
 
-    public void registerAdmin(String userName, String password, String phoneNumber, String email){
+    public void registerAdmin(String userName, String password, String email, String phoneNumber){
 
             String adminId = UUID.randomUUID().toString();
 

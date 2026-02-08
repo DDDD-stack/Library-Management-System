@@ -1,2 +1,0 @@
-
-Book title is: Naruto, Author is: Masashi Kishimoto, ISBN is: U82943143P, Genre: manga, Published in: 2001, Availability: false

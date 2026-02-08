@@ -1,2 +1,2 @@
-Username: Denis, Password: Denis1234robi12, Email: drobi840@gmail.com, Customer ID: 96e5b00f-f853-477d-b681-4435b447ce67, Status: Customer
+Username: Denis, Password: Denis1234robi12, Email: drobi840@gmail.com, Phone Number: 0688343551, Customer ID: ed2d1caf-1226-42e7-90a8-c53758b2b4a9,Membership ID: ce45330f-c880-4174-a68d-e9c4d591599d,Membership Type: Standard,Status: Customer
 

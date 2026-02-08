@@ -1,2 +1,1 @@
-Username: Erald, Password: esaraci, Email: esaraci@gmail.com, Admin ID: c6304af0-2ee1-41ed-adf2-7d96c413982a, Status: Administrator
-Username: Denisi, Password: Denis123, Email: drobi840@gmail.it, Admin ID: f2c4ccbc-c895-418d-af1e-70e7bf68b507, Status: Administrator
+Username: Erald, Password: esaraci, Email: esaraci24@epoka.edu.al, Phone Number: 0675466413, Admin ID: 66c86d6e-c3ee-483c-b318-5b1b9df7d0c4, Status: Administrator

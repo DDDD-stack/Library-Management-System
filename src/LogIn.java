@@ -6,76 +6,84 @@ public class LogIn {
 
     public LogIn(){}
 
-                                                                                            //LogIn method---------------
+    //LogIn method---------------
 
     public static void LogInCustomer(String userName, String password) {
-        boolean found = false; //will be used as verification if the user is found or not
+        boolean found = false; //will be used if the user is found or not
 
-        //Check the users file--------
         try (BufferedReader br = new BufferedReader(new FileReader("customers.txt"))) {
             String line;
 
             while ((line = br.readLine()) != null) {
-                //Seperate the line into parts to make it easier to find specific values
+
+                if (line.trim().isEmpty() || !line.contains(",")) {
+                    continue;
+                }
+
                 String[] parts = line.split(",");
 
                 String CName = parts[0].split(":")[1].trim();
                 String CPass = parts[1].split(":")[1].trim();
-                String CEmail = parts[2].split(":")[1].trim();
-                String CPnumber = parts[3].split(":")[1].trim();
-                String CcustomerID = parts[4].split(":")[1].trim();
-                String CMembershipID = parts[5].split(":")[1].trim();
-                String CMembershiptType = parts[6].split(":")[1].trim();
-                String CRole = parts[7].split(":")[1].trim();
 
 
-                //Check username and password for a match
-                if (parts[0].contains(userName) && parts[1].contains(password)) {
+
+                if (CName.equals(userName) && CPass.equals(password)) {
                     found = true;
+                    String CEmail = parts[2].split(":")[1].trim();
+                    String CPnumber = parts[3].split(":")[1].trim();
+                    String CcustomerID = parts[4].split(":")[1].trim();
+                    String CMembershipID = parts[5].split(":")[1].trim();
+                    String CMembershiptType = parts[6].split(":")[1].trim();
+                    String CRole = parts[7].split(":")[1].trim();
 
-                    //Create the customer constructor to use as the user
-                    Customer customer = new Customer(CName, CPass, CEmail, CPnumber, CcustomerID, CMembershipID, CMembershiptType,CRole);
-                    Main.currentUser=customer;
+                    Main.currentUser = new Customer(CName, CPass, CEmail, CcustomerID, CPnumber, CMembershipID, CMembershiptType,CRole);
+
                     String[] parts2 = parts[0].split(":");
                     System.out.println("Logged in! Welcome back: " + parts2[1].trim());
                       break;
 
-                } else {
-                    System.out.println("Invalid username or password");
                 }
 
+            }
+            if(!found){
+                System.out.println("Invalid username or password");
             }
         }catch (IOException e) {
             System.out.println("File not found!");
         }
     }
-        //If not found int the users file then check the admins file same steps apply here
+
         public static void LogInAdmin(String userName, String password) {
         boolean found = false;
             try(BufferedReader br = new BufferedReader(new FileReader("admins.txt"))){
                 String line;
 
                 while((line = br.readLine()) != null){
+
+                    if (line.trim().isEmpty() || !line.contains(",")) {
+                        continue;
+                    }
+
                     String[] parts = line.split(",");
 
                     String CName = parts[0].split(":")[1].trim();
                     String CPass = parts[1].split(":")[1].trim();
-                    String CEmail = parts[2].split(":")[1].trim();
-                    String CAdminID = parts[3].split(":")[1].trim();
-                    String CStatus = parts[4].split(":")[1].trim();
 
-                    if(parts[0].equals(userName) && parts[1].equals(password)){
+                    if(CName.equals(userName) && CPass.equals(password)){
                         found = true;
+                        String CEmail = parts[2].split(":")[1].trim();
+                        String CAdminID = parts[3].split(":")[1].trim();
+                        String CStatus = parts[4].split(":")[1].trim();
+                        Main.currentUser = new Administrator(CName, CPass, CEmail, CAdminID, CStatus);
 
-                        Administrator admin = new Administrator(CName, CPass, CEmail, CAdminID, CStatus);
-                        Main.currentUser=admin;
                               String[] parts2 = parts[0].split(":");
                             System.out.println("Logged in! Welcome back: " + parts2[1].trim());
                         break;
                     }
-                    else {
-                        System.out.println("Invalid username or password");
+
                     }
+                if(!found) {
+                    System.out.println("Invalid username or password");
                 }
             }catch(IOException e){
                 System.out.println("File not found!");

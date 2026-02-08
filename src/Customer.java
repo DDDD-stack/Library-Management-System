@@ -80,7 +80,7 @@ public class Customer extends User{
 
 
     public void borrowBook(String title, String author, LocalDate borrowDate, int nrOfDays) {
-        // 1. Check Membership Limit (Optional but recommended)
+
         int currentBooks = getCurrentBorrowedCount();
         if (currentBooks >= this.maxBooks) {
             System.out.println("Limit reached! You have a " + this.membershipType + " membership.");
@@ -91,21 +91,15 @@ public class Customer extends User{
         boolean bookFoundAndBorrowed = false;
         LocalDate dueDate = borrowDate.plusDays(nrOfDays);
 
+
         try (BufferedReader reader = new BufferedReader(new FileReader("books.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                // Check if it is the correct book
+
                 if (line.contains(title) && line.contains(author)) {
-
                     if (line.contains("Availability: true")) {
-                        // --- MODIFICATION START ---
-                        // We mark it false, and STAMP the Membership ID onto the line
-                        line = line.replace("Availability: true", "Availability: false")
-                                + ", Borrowed Date: " + borrowDate
-                                + ", Return Date: " + dueDate
-                                + ", MemID: " + this.MembershipID; // <--- Saving the ID here!
-                        // --- MODIFICATION END ---
-
+                        // Only change availability in books.txt
+                        line = line.replace("Availability: true", "Availability: false");
                         bookFoundAndBorrowed = true;
                     } else if (line.contains("Availability: false")) {
                         System.out.println("Book is not available!");
@@ -114,10 +108,10 @@ public class Customer extends User{
                 lines.add(line);
             }
         } catch (IOException e) {
-            System.out.println("Error reading file: " + e.getMessage());
+            System.out.println("Error reading books file: " + e.getMessage());
         }
 
-        // Write changes to books.txt
+
         if (bookFoundAndBorrowed) {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter("books.txt"))) {
                 for (String wline : lines) {
@@ -128,9 +122,26 @@ public class Customer extends User{
                 System.out.println("Error writing books.txt");
             }
 
-            // Update the helper files
-            readForToBorrowList();
-            uploadToBorrowList();
+
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter("borrowed.txt", true))) {
+
+
+                String currentUserName = (Main.currentUser != null) ? Main.currentUser.getUserName() : "Unknown";
+
+
+                String borrowedLine = "Title: " + title
+                        + ", Author: " + author
+                        + ", Borrowed Date: " + borrowDate
+                        + ", Return Date: " + dueDate
+                        + ", MemID: " + this.MembershipID
+                        + ", Username: " + currentUserName;
+
+                writer.write(borrowedLine);
+                writer.newLine();
+
+            } catch (IOException e) {
+                System.out.println("Error writing to borrowed.txt");
+            }
 
             if (Main.currentUser != null) {
                 System.out.println(Main.currentUser.getUserName() + " (ID: " + this.MembershipID + ") Borrowed successfully!");
@@ -141,65 +152,89 @@ public class Customer extends User{
     }
 
     public void returnBook(String title, String author) {
-        this.lines.clear();
-        boolean success = false;
-        boolean wrongUser = false;
+        this.lines.clear(); // We use this for books.txt
+        boolean bookReturnedInInventory = false;
 
+                                                                                            //Update books.txt ---------
         try (BufferedReader reader = new BufferedReader(new FileReader("books.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
+
+                // Find the book based on Title and Author
                 if (line.contains(title) && line.contains(author)) {
 
+                    // If it says "false", we make it "true"
                     if (line.contains("Availability: false")) {
-
-                        // --- MODIFICATION START ---
-                        // SECURITY CHECK: Does this line contain MY Membership ID?
-                        if (line.contains(this.MembershipID)) {
-
-                            // It's my book! Reset it.
-                            // We strip away all the extra dates and IDs by keeping only the first part.
-                            int statusIndex = line.indexOf("Availability: false");
-                            if (statusIndex != -1) {
-                                line = line.substring(0, statusIndex) + "Availability: true";
-                            }
-                            success = true;
-
-                        } else {
-                            // The book is borrowed, but NOT by this user.
-                            wrongUser = true;
-                        }
-                        // --- MODIFICATION END ---
-
+                        line = line.replace("Availability: false", "Availability: true");
+                        bookReturnedInInventory = true;
                     } else if (line.contains("Availability: true")) {
-                        System.out.println("Book is already in the library!");
+                        System.out.println("This book is already marked as returned in the inventory.");
                     }
                 }
                 lines.add(line);
             }
         } catch (IOException e) {
-            System.out.println("Error reading file: " + e.getMessage());
+            System.out.println("Error reading books.txt: " + e.getMessage());
+            return;
         }
 
-        if (success) {
+        // Save changes to books.txt
+        if (bookReturnedInInventory) {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter("books.txt"))) {
                 for (String wline : lines) {
                     writer.write(wline);
                     writer.newLine();
                 }
             } catch (IOException e) {
-                System.out.println("Error writing file.");
+                System.out.println("Error writing to books.txt");
             }
 
-            // Update lists
-            readForToBorrowList();
-            uploadToBorrowList(); // Remember: remove 'true' from FileWriter inside this method!
+                                                                                    //Remove from borrowed.txt ---------
 
-            System.out.println("Returned successfully!");
+            ArrayList<String> borrowedLines = new ArrayList<>();
+            boolean foundInBorrowedFile = false;
 
-        } else if (wrongUser) {
-            System.out.println("Error: You cannot return a book borrowed by another member!");
+            try (BufferedReader reader = new BufferedReader(new FileReader("borrowed.txt"))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+
+
+                    boolean isMyBook = line.contains(title) &&
+                            line.contains(author) &&
+                            line.contains(this.MembershipID);
+
+                    if (isMyBook) {
+
+                        foundInBorrowedFile = true;
+                    } else {
+
+                        borrowedLines.add(line);
+                    }
+                }
+            } catch (IOException e) {
+                System.out.println("Error reading borrowed.txt");
+            }
+            
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter("borrowed.txt"))) {
+                for (String wline : borrowedLines) {
+                    writer.write(wline);
+                    writer.newLine();
+                }
+            } catch (IOException e) {
+                System.out.println("Error updating borrowed.txt");
+            }
+
+
+            if (Main.currentUser != null) {
+                if (foundInBorrowedFile) {
+                    System.out.println(Main.currentUser.getUserName() + " returned the book successfully!");
+                } else {
+                    System.out.println("Book availability updated, but record not found in borrowed.txt (Manual return?).");
+                }
+            }
+
         } else {
-            System.out.println("Could not return book.");
+            System.out.println("Could not return book. It might not be in the library or is already returned.");
         }
     }
 
@@ -209,39 +244,5 @@ public class Customer extends User{
     public String toString(){
         return super.toString() + "," + " Customer ID: " + customerID + "," +"Membership ID: "+ MembershipID+ "," + "Membership Type: " + membershipType + ","+ "Status: " + role;
     }
-
-
-
-
-    //Method to read the books file so it can find and save in the ArrayList all the books not available
-    public void readForToBorrowList(){
-        ulines.clear();     //to clear the arraylines when program stops to prevent duplication
-        try(BufferedReader reader = new BufferedReader(new FileReader("books.txt"))){
-            String line;
-
-            while((line = reader.readLine()) != null){
-                if(line.contains("Availability: false")){
-                    ulines.add(line);
-                }
-
-            }
-        }catch(IOException e){
-            System.out.println(e.getMessage());
-        }
-    }
-    //the books that aren't saved in the ulines are uploaded into the borrowed file
-    public void uploadToBorrowList(){
-        try(BufferedWriter writer = new BufferedWriter(new FileWriter("borrowed.txt",true))){
-            for(String line : ulines){
-                writer.write(line);
-                writer.newLine();
-            }
-        }catch(IOException e){
-            System.out.println("File not found!");
-        }
-    }
-
-
-
 
 }
