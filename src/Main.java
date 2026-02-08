@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 public class Main{
-    public static User currentUser=null;
+    public static Customer currentUser=null;
     public static void main(String[] args){
         ConsoleUI console = new ConsoleUI();
         File file = new File("borrowed.txt");
@@ -29,6 +29,6 @@ public class Main{
 
         //Provoj edhe iher tana opsionet perveq returnit se se kam ba njat e shif a kam harru me shkruj naj gja ktu
 
-        //Edhe nmos tardht keq a munesh me e ba searching qe ti baj ignore case ke te tana si ke searchi i librave edhe ke validimi i metodave
+        //Edhe nmos tardht keq a munesh me e ba searching qe ti baj ignore case ke te tana si ke searchi i librave edhe ke validimi i metodave     partially made
     }
 }

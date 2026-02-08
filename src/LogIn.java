@@ -23,7 +23,7 @@ public class LogIn {
                 if (parts[0].contains(userName) && parts[1].contains(password)){
                     found = true;
 
-                    //Create the cutomer constructor to use as the user
+                    //Create the customer constructor to use as the user
                     Main.currentUser = new Customer(parts[0], parts[1], parts[2], parts[3]);
                     for(int i=0;i< parts.length;i++) {
                         String[] parts2 = parts[i].split(":");
@@ -67,6 +67,10 @@ public class LogIn {
         }
 
     }
+    
+
+
+
 
                                                                                             //Log Out method---------------
 

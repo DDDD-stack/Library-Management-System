@@ -58,6 +58,7 @@ public abstract class User {
         this.email = email;
     }
 
+
     @Override
     public String toString(){
         return "Username: " + userName + "," + " Password: " + password + "," + " Email: " + email;

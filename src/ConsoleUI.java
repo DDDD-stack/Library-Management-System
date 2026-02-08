@@ -2,6 +2,7 @@ import java.io.*;
 import java.time.LocalDate;
 import java.util.Scanner;
 import java.util.UUID;
+import java.util.ArrayList;
 
 public class ConsoleUI {
 
@@ -74,7 +75,7 @@ public class ConsoleUI {
                     sc.nextLine();
                     LocalDate borrowDate = LocalDate.now();
 
-                    bookConstructor.borrowBook(name, bookTitle, bookAuthor, borrowDate, nrOfDays);
+                    Main.currentUser.borrowBook(name, bookTitle, bookAuthor, borrowDate, nrOfDays);
 
                     break;
 
@@ -88,6 +89,7 @@ public class ConsoleUI {
                     String loginPassword = sc.nextLine();
 
                     logIn.LogIn(loginName, loginPassword);
+
                     break;
 
                 case 5:
