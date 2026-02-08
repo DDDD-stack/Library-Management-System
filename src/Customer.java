@@ -10,11 +10,10 @@ public class Customer extends User{
 
 
     ArrayList<String> lines = new ArrayList<>();
-    ArrayList<String> ulines = new ArrayList<>();
 
                                                                                             //Constructors--------------
     public Customer(){
-        // No-arg constructor
+
     }
 
     public Customer(String userName, String password, String email, String phoneNumber, String customerID, String MembershipID, String membershipType){
@@ -60,7 +59,6 @@ public class Customer extends User{
             String line;
             while ((line = reader.readLine()) != null) {
                 // Check if this specific user borrowed this book
-                // NOTE: This assumes your borrowed.txt lines contain the username!
                 if (line.contains(this.getUserName())) {
                     count++;
                 }
@@ -72,7 +70,6 @@ public class Customer extends User{
     }
 
                                                                                             //Setters-------------------
-
     public void setCustomerID(String customerID){
         this.customerID = customerID;
     }
@@ -91,18 +88,18 @@ public class Customer extends User{
         boolean bookFoundAndBorrowed = false;
         LocalDate dueDate = borrowDate.plusDays(nrOfDays);
 
-
         try (BufferedReader reader = new BufferedReader(new FileReader("books.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
 
-                if (line.contains(title) && line.contains(author)) {
+
+                if (!bookFoundAndBorrowed && line.contains(title) && line.contains(author)) {
+
                     if (line.contains("Availability: true")) {
-                        // Only change availability in books.txt
                         line = line.replace("Availability: true", "Availability: false");
-                        bookFoundAndBorrowed = true;
+                        bookFoundAndBorrowed = true; // Flag set to true, loop won't enter here again
                     } else if (line.contains("Availability: false")) {
-                        System.out.println("Book is not available!");
+
                     }
                 }
                 lines.add(line);
@@ -111,8 +108,8 @@ public class Customer extends User{
             System.out.println("Error reading books file: " + e.getMessage());
         }
 
-
         if (bookFoundAndBorrowed) {
+
             try (BufferedWriter writer = new BufferedWriter(new FileWriter("books.txt"))) {
                 for (String wline : lines) {
                     writer.write(wline);
@@ -125,16 +122,19 @@ public class Customer extends User{
 
             try (BufferedWriter writer = new BufferedWriter(new FileWriter("borrowed.txt", true))) {
 
-
-                String currentUserName = (Main.currentUser != null) ? Main.currentUser.getUserName() : "Unknown";
-
+                String userName;
+                if (Main.currentUser != null) {
+                    userName = Main.currentUser.getUserName();
+                } else {
+                    userName = "Unknown";
+                }
 
                 String borrowedLine = "Title: " + title
                         + ", Author: " + author
                         + ", Borrowed Date: " + borrowDate
                         + ", Return Date: " + dueDate
                         + ", MemID: " + this.MembershipID
-                        + ", Username: " + currentUserName;
+                        + ", Username: " + userName;
 
                 writer.write(borrowedLine);
                 writer.newLine();
@@ -147,28 +147,23 @@ public class Customer extends User{
                 System.out.println(Main.currentUser.getUserName() + " (ID: " + this.MembershipID + ") Borrowed successfully!");
             }
         } else {
-            System.out.println("Book not found or already borrowed.");
+            System.out.println("Book not found or is currently unavailable.");
         }
     }
 
     public void returnBook(String title, String author) {
-        this.lines.clear(); // We use this for books.txt
+        this.lines.clear();
         boolean bookReturnedInInventory = false;
 
-                                                                                            //Update books.txt ---------
         try (BufferedReader reader = new BufferedReader(new FileReader("books.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
 
-                // Find the book based on Title and Author
-                if (line.contains(title) && line.contains(author)) {
+                if (!bookReturnedInInventory && line.contains(title) && line.contains(author)) {
 
-                    // If it says "false", we make it "true"
                     if (line.contains("Availability: false")) {
                         line = line.replace("Availability: false", "Availability: true");
                         bookReturnedInInventory = true;
-                    } else if (line.contains("Availability: true")) {
-                        System.out.println("This book is already marked as returned in the inventory.");
                     }
                 }
                 lines.add(line);
@@ -178,7 +173,6 @@ public class Customer extends User{
             return;
         }
 
-        // Save changes to books.txt
         if (bookReturnedInInventory) {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter("books.txt"))) {
                 for (String wline : lines) {
@@ -189,8 +183,6 @@ public class Customer extends User{
                 System.out.println("Error writing to books.txt");
             }
 
-                                                                                    //Remove from borrowed.txt ---------
-
             ArrayList<String> borrowedLines = new ArrayList<>();
             boolean foundInBorrowedFile = false;
 
@@ -198,23 +190,20 @@ public class Customer extends User{
                 String line;
                 while ((line = reader.readLine()) != null) {
 
-
                     boolean isMyBook = line.contains(title) &&
                             line.contains(author) &&
                             line.contains(this.MembershipID);
 
                     if (isMyBook) {
-
                         foundInBorrowedFile = true;
                     } else {
-
                         borrowedLines.add(line);
                     }
                 }
             } catch (IOException e) {
                 System.out.println("Error reading borrowed.txt");
             }
-            
+
             try (BufferedWriter writer = new BufferedWriter(new FileWriter("borrowed.txt"))) {
                 for (String wline : borrowedLines) {
                     writer.write(wline);
@@ -224,17 +213,16 @@ public class Customer extends User{
                 System.out.println("Error updating borrowed.txt");
             }
 
-
             if (Main.currentUser != null) {
                 if (foundInBorrowedFile) {
                     System.out.println(Main.currentUser.getUserName() + " returned the book successfully!");
                 } else {
-                    System.out.println("Book availability updated, but record not found in borrowed.txt (Manual return?).");
+                    System.out.println("Book returned to shelf, but no record found in borrowed log.");
                 }
             }
 
         } else {
-            System.out.println("Could not return book. It might not be in the library or is already returned.");
+            System.out.println("Could not return book. It is already on the shelf or not found.");
         }
     }
 

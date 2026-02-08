@@ -139,12 +139,12 @@ int choice1;
                 System.out.println("1. Add Book");      //complete
                 System.out.println("2. Borrow Book");    //complete
                 System.out.println("3. Return Book");  //complete
-                System.out.println("4. Log In");       //defect
+                System.out.println("4. Remove Book");
                 System.out.println("5. Log Out");      //complete
-                System.out.println("6. Register");     //complete
-                System.out.println("7. Filter");        //complete
-                System.out.println("8. Search for book");   //complete
-                System.out.println("9. Show current user profile");   //defect
+                System.out.println("6. Filter");        //complete
+                System.out.println("7. Search for book");   //complete
+                System.out.println("8. Show current user profile");//complete
+                System.out.println("9. Update Book");
                 System.out.println("0. Exit");    //complete
 
                 System.out.println("Enter your choice: ");
@@ -206,37 +206,12 @@ int choice1;
                         break;
                     }
                     case 4: {
+                        System.out.println("Enter Book title: ");
+                        String bookTitle = sc.nextLine();
+                        System.out.println("Enter Book Author: ");
+                        String bookAuthor = sc.nextLine();
 
-                        //User Log In------------------
-                        if (Main.currentUser == null) {
-
-                            System.out.println("1.Log In as customer");
-                            System.out.println("2.Log In as administrator");
-                            System.out.println("Enter your choice: ");
-                            int logInChoice = sc.nextInt();
-                            sc.nextLine();
-
-                            if (logInChoice == 1) {
-                                System.out.println("Enter UserName: ");
-                                String userName = sc.nextLine();
-                                System.out.println("Enter Password: ");
-                                String password = sc.nextLine();
-
-                                LogIn.LogInCustomer(userName, password);
-
-                            } else if (logInChoice == 2) {
-
-                                System.out.println("Enter UserName: ");
-                                String userName = sc.nextLine();
-                                System.out.println("Enter Password: ");
-                                String password = sc.nextLine();
-
-                                LogIn.LogInAdmin(userName, password);
-                            }
-                        } else {
-                            System.out.println("Already logged in!");
-                        }
-                        break;
+                        adminConstructor.removeBook(bookTitle, bookAuthor);
                     }
                     case 5: {
 
@@ -248,67 +223,10 @@ int choice1;
                     }
 
 
-                    //  Register user ----------------
-
-                    /*case 6: {
-
-                        System.out.println("1. Register as a customer");
-                        System.out.println("2. Register as an Administrator");
-                        System.out.println("Enter your choice: ");
-                        int choice2 = sc.nextInt();
-                        sc.nextLine();
-
-
-                        // Register Menu----------
-
-                        switch (choice2) {
-
-
-                            //  Registration as user----------
-
-                            case 1:
-                                System.out.println("Enter User Name: ");
-                                String customerName = sc.nextLine();
-                                System.out.println("Enter Password: ");
-                                String customerPassword = sc.nextLine();
-                                System.out.println("Enter Email: ");
-                                String customerEmail = sc.nextLine();
-
-                                user.registerCustomer(customerName, customerPassword, customerEmail);
-
-                                break;
-
-
-                            //Register as an Admin------------------
-
-
-                            case 2:
-                                System.out.println("Enter admin password: ");
-                                String adminPass = sc.nextLine();
-                                user.checkAdminPass(adminPass);
-
-                                if (user.getPassed()) {
-                                    System.out.println("Enter User Name: ");
-                                    String adminName = sc.nextLine();
-                                    System.out.println("Enter Password: ");
-                                    String adminPassword = sc.nextLine();
-                                    System.out.println("Enter Email: ");
-                                    String adminEmail = sc.nextLine();
-
-                                    user.registerAdmin(adminName, adminPassword, adminEmail);
-                                }
-
-                                break;
-
-                        }
-                        break;
-                    }
-*/
-
                     //Filter -----------------
 
 
-                    case 7: {
+                    case 6: {
                         System.out.println("1. Filter by genre");
                         System.out.println("2. Filter by year");
                         System.out.println("3. Filter by available");
@@ -390,7 +308,7 @@ int choice1;
                     //Search book ---------------------
 
 
-                    case 8: {
+                    case 7: {
                         System.out.println("Enter the book title: ");
                         String search = sc.nextLine();
 
@@ -415,10 +333,70 @@ int choice1;
                         }
                         break;
                     }
-                    case 9: {
+                    case 8: {
                         System.out.println(Main.currentUser);
                         break;
                     }
+
+                    case 9: {
+                        int uChoice;
+                        System.out.println("Enter book title: ");
+                        String bookTitle = sc.nextLine();
+                        System.out.println("Enter Book Author: ");
+                        String bookAuthor = sc.nextLine();
+
+                        System.out.println("1.Update Book Title");
+                        System.out.println("2.Update Book Author");
+                        System.out.println("3.Update Book Genre");
+                        System.out.println("4.Update Book Publication Year");
+                        System.out.println("5.Update Book Availability");
+
+                        uChoice=sc.nextInt();
+                        switch (uChoice) {
+                            case 1: {
+                                Administrator admin = (Administrator) Main.currentUser;
+                                System.out.println("Enter new Book Title: ");
+                                sc.nextLine();
+                                String newTitle = sc.nextLine();
+                                admin.updateBookTitle(bookTitle, bookAuthor, newTitle);
+                                break;
+                            }
+                            case 2: {
+                                Administrator admin = (Administrator) Main.currentUser;
+                                System.out.println("Enter new Book Author: ");
+                                sc.nextLine();
+                                String newAuthor = sc.nextLine();
+                                admin.updateBookAuthor(bookTitle, bookAuthor, newAuthor);
+                                break;
+                            }
+                            case 3: {
+                                Administrator admin = (Administrator) Main.currentUser;
+                                System.out.println("Enter new Book Genre: ");
+                                sc.nextLine();
+                                String newGenre = sc.nextLine();
+                                admin.updateBookGenre(bookTitle, bookAuthor, newGenre);
+                                break;
+                            }
+                            case 4: {
+                                Administrator admin = (Administrator) Main.currentUser;
+                                System.out.println("Enter new Book Publication Year: ");
+                                int newPublicationYear = sc.nextInt();
+                                sc.nextLine();
+                                admin.updateBookYear(bookTitle, bookAuthor, newPublicationYear);
+                                break;
+                            }
+                            case 5: {
+                                Administrator admin = (Administrator) Main.currentUser;
+                                System.out.println("Enter new Book Availability: ");
+                                boolean newAvailability = sc.nextBoolean();
+                                sc.nextLine();
+                                admin.updateBookAvailability(bookTitle, bookAuthor, newAvailability);
+                                break;
+                            }
+                        }
+                        break;
+                        }
+
 
                     //Exit loop
 

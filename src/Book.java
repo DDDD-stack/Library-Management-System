@@ -1,9 +1,3 @@
-import java.time.LocalDate;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -15,15 +9,10 @@ public class Book{
     private int publicationYear;
     private boolean available;
 
-
                                                                                                                                     //Constructors--------------
-    ArrayList<String> lines = new ArrayList<>();
-    ArrayList<String> ulines = new ArrayList<>();
-
     public Book(){ //No-arg constructor
 
     }
-
 
     public Book(String title, String author, String genre, String ISBN, int publicationYear, boolean available){ //Constructor for adding
         this.title = title;
@@ -86,7 +75,7 @@ public class Book{
 
     @Override
     public String toString(){
-        return "Book title is: " + title + "," + " Author is: " + author + "," + " ISBN is: " + ISBN + "," + " Genre: " + genre + "," + " Published in: " + publicationYear + "," + " Availability: " + available + "\n";
+        return "Book title is: " + title + "," + " Author is: " + author + "," + " ISBN is: " + ISBN + "," + " Genre: " + genre + "," + " Published in: " + publicationYear + "," + " Availability: " + available;
     }
 
 

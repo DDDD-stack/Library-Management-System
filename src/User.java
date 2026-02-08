@@ -1,9 +1,3 @@
-import java.util.Scanner;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.File;
-
 public abstract class User {
     protected String userName;
     protected String password;
@@ -13,19 +7,8 @@ public abstract class User {
 
 
 
-    /*
-    borrow method
-    return method
-
-
-
-
-    */
-
-
-
     //Constructors---------
-    public User(){};
+    public User(){}
 
     public User(String userName, String password, String email, String phoneNumber){
         this.userName = userName;
@@ -47,6 +30,13 @@ public abstract class User {
         return email;
     }
 
+    public String getPhoneNumber(){
+        return phoneNumber;
+    }
+
+    public String getRole(){
+        return role;
+    }
     //Setters------------
     public void setUserName(String userName){
         this.userName = userName;
@@ -58,6 +48,10 @@ public abstract class User {
 
     public void setEmail(String email){
         this.email = email;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
 

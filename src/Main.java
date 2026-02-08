@@ -1,12 +1,11 @@
 import java.io.File;
-
+import java.io.IOException;
 
 public class Main{
     public static  User currentUser=null;
     public static void main(String[] args){
+        initializeFiles();
         ConsoleUI console = new ConsoleUI();
-        File file = new File("borrowed.txt");
-
         console.ConsoleUi();
 
         //Nuk krijohet file i ri kur ban borrow (E ke ke Book metoden)
@@ -28,5 +27,19 @@ public class Main{
         //Provoj edhe iher tana opsionet perveq returnit se se kam ba njat e shif a kam harru me shkruj naj gja ktu
 
         //Edhe nmos tardht keq a munesh me e ba searching qe ti baj ignore case ke te tana si ke searchi i librave edhe ke validimi i metodave     partially made
+    }
+    private static void initializeFiles() {
+        String[] files = {"customers.txt", "admins.txt", "books.txt", "borrowed.txt"};
+
+        for (String fileName : files) {
+            File file = new File(fileName);
+            try {
+                if (file.createNewFile()) {
+                    System.out.println("New file created" + fileName);
+                }
+            } catch (IOException e) {
+                System.out.println("Error creating file " + fileName);
+            }
+        }
     }
 }
