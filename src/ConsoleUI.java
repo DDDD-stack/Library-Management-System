@@ -12,7 +12,6 @@ public class ConsoleUI {
         UserRegistration user = new UserRegistration();
         Administrator adminConstructor = new Administrator();
         //Book bookConstructor = new Book();   per ca duhet kjo??
-        LogIn logIn = new LogIn();
         loopApp:
 
         //    Menu ----------------------
@@ -20,16 +19,16 @@ public class ConsoleUI {
         //Keep the login the same but make special id for employ and user EX: Userid: U1,U2.....   EmployeeID: E1,E2.......
 
         while(true){
-            System.out.println("1. Add Book");
-            System.out.println("2. Borrow Book");
-            System.out.println("3. Return Book");  //missing
-            System.out.println("4. Log In");
-            System.out.println("5. Log Out");
-            System.out.println("6. Register");
-            System.out.println("7. Filter");
-            System.out.println("8. Search for book");
-            System.out.println("9. Show current user profile");
-            System.out.println("0. Exit");
+            System.out.println("1. Add Book");      //complete
+            System.out.println("2. Borrow Book");    //complete
+            System.out.println("3. Return Book");  //complete
+            System.out.println("4. Log In");       //defect
+            System.out.println("5. Log Out");      //complete
+            System.out.println("6. Register");     //complete
+            System.out.println("7. Filter");        //complete
+            System.out.println("8. Search for book");   //complete
+            System.out.println("9. Show current user profile");   //defect
+            System.out.println("0. Exit");    //complete
 
             System.out.println("Enter your choice: ");
             int choice = sc.nextInt();
@@ -75,6 +74,8 @@ public class ConsoleUI {
 
                     break;
                 }
+
+                //Return Book------------------
                 case 3: {
                     System.out.println("Enter Book title: ");
                     String bookTitle = sc.nextLine();
@@ -92,12 +93,14 @@ public class ConsoleUI {
 
                     //User Log In------------------
                     if(Main.currentUser==null) {
-                    System.out.println("Enter User Name: ");
-                    String loginName = sc.nextLine();
-                    Main.currentUser.setUserName(loginName);
-                    System.out.println("Enter Password: ");
-                    String loginPassword = sc.nextLine();
-                    Main.currentUser.setPassword(loginPassword);
+
+                        Main.currentUser = new Customer();
+                        System.out.println("Enter User Name: ");
+                        String loginName = sc.nextLine();
+                        Main.currentUser.setUserName(loginName);
+                        System.out.println("Enter Password: ");
+                        String loginPassword = sc.nextLine();
+                        Main.currentUser.setPassword(loginPassword);
                     }
                     break;
                 }
@@ -105,7 +108,7 @@ public class ConsoleUI {
 
                     //LogOut-------------------
                      if(Main.currentUser!=null) {
-                             logIn.LogOut();
+                         LogIn.LogOut();
                           }
                     break;
                 }
@@ -188,86 +191,71 @@ public class ConsoleUI {
                     System.out.println("2. Filter by year");
                     System.out.println("3. Filter by available");
                     int filter = sc.nextInt();
-                    sc.nextLine();
+                    sc.nextLine(); // Consume newline
+
+                    // 1. LOAD THE DATA ONCE
+                    ArrayList<Book> allBooks = loadBooksFromFile();
 
                     switch (filter) {
-
-                        //Filter by gender--------------------
-
+                        // --- Filter by Genre ---
                         case 1:
                             System.out.println("Enter genre: ");
-                            String filterByGenre = sc.nextLine();
-
-
-                            //Update : upload the books in an array list and upload
-                            //Make it a method
-
+                            String inputGenre = sc.nextLine().trim();
 
                             try (BufferedReader reader = new BufferedReader(new FileReader("books.txt"))) {
                                 String line;
                                 while ((line = reader.readLine()) != null) {
+
+                                                                                    //Skips empty line------------------
+                                    if (line.trim().isEmpty()) {
+                                        continue;
+                                    }
+
                                     String[] parts = line.split(",");
 
-                                    if (parts[3].contains("Genre: " + filterByGenre)) {
+                                                                              //checks if all parts are there-----------
+                                    if (parts.length < 4) {
+                                        continue;             //Skip the incorrect line and go to the next one----------
+                                    }
 
+                                    String Genrename = parts[3];
+
+                                                                                             //Clean and Compare--------
+                                    String fileGenre = Genrename.replace("Genre:", "").trim();
+
+                                    if (fileGenre.equalsIgnoreCase(inputGenre)) {
                                         System.out.println(line);
-
                                     }
                                 }
                             } catch (IOException e) {
-                                System.out.println("File not found: " + e.getMessage());
+                                System.out.println("Error reading file: " + e.getMessage());
                             }
                             break;
 
-
-                        //Filter by year published----------------
-
-
+                        // --- Filter by Year ---
                         case 2:
-                            System.out.println("Enter year range: ");
-                            int yearRange1 = sc.nextInt();
+                            System.out.println("Enter start year: ");
+                            int startYear = sc.nextInt();
+                            System.out.println("Enter end year: ");
+                            int endYear = sc.nextInt();
                             sc.nextLine();
-                            int yearRange2 = sc.nextInt();
-                            sc.nextLine();
 
-
-                            //Update :  upload the books in an array list and upload
-                            //Make it a method
-
-
-                            try (BufferedReader reader = new BufferedReader(new FileReader("books.txt"))) {
-                                String line;
-
-                                while ((line = reader.readLine()) != null) {
-                                    String[] parts = line.split(",");
-
-                                    String[] part = parts[4].split(": ");
-
-                                    int year = Integer.parseInt(part[1].trim());
-
-                                    if(year >= yearRange1 && year <= yearRange2){
-                                        System.out.println(line);
-                                    }
+                            for (Book b : allBooks) {
+                                if (b.getPublicationYear() >= startYear && b.getPublicationYear() <= endYear) {
+                                    System.out.println(b);
                                 }
-                            } catch (IOException e) {
-                                System.out.println("File not found: " + e.getMessage());
                             }
                             break;
 
+                        // --- Filter by Availability ---
                         case 3:
-                            try (BufferedReader reader = new BufferedReader(new FileReader("books.txt"))) {
-                                String line;
-
-                                while ((line = reader.readLine()) != null) {
-                                    String[] parts = line.split(",");
-
-                                    if(parts[5].contains("Availability: true" )){
-                                        System.out.println(line);
-                                    }
+                            System.out.println("--- Available Books ---");
+                            for (Book b : allBooks) {
+                                if (b.isAvailable()) {
+                                    System.out.println(b);
                                 }
-                            } catch (IOException e) {
-                                System.out.println("File not found: " + e.getMessage());
                             }
+                            break;
 
                         default:
                             System.out.println("Invalid choice!");
@@ -323,5 +311,34 @@ public class ConsoleUI {
                     break;
             }
         }
+    }
+
+
+    // Helper method to read the file into a list of Book objects
+    private ArrayList<Book> loadBooksFromFile() {
+        ArrayList<Book> books = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader("books.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+
+                // SECURITY CHECK: Ensure line has enough parts before accessing index 5
+                if (parts.length < 6) {
+                    continue;
+                }
+                // Clean the data to get just the values
+                String title = parts[0].trim();
+                String author = parts[1].trim();
+                String isbn = parts[2].trim();
+                String genre = parts[3].replace("Genre:", "").trim();
+                int year = Integer.parseInt(parts[4].replaceAll("[^0-9]", ""));
+                boolean isAvailable = parts[5].contains("true");
+
+                books.add(new Book(title, author, isbn, genre, year, isAvailable));
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading library: " + e.getMessage());
+        }
+        return books;
     }
 }

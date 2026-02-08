@@ -1,11 +1,10 @@
 import java.io.*;
-import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Customer extends User{
     private String customerID;
-
+    private LocalDate returnDate=null;
 
 
     ArrayList<String> lines = new ArrayList<>();
@@ -16,10 +15,16 @@ public class Customer extends User{
         // No-arg constructor
     }
 
-    public Customer(String userName, String password, String email, String customerID){ //Customer registration constructor
+    public Customer(String userName, String password, String email, String customerID){
         super(userName, password, email);
         this.customerID = customerID;
         this.role = "Customer";
+    }
+
+    public Customer(String userName, String password, String email, String customerID, String role){ //Customer registration constructor
+        super(userName, password, email);
+        this.customerID = customerID;
+        this.role = role;
     }
 
                                                                                             //Getters-------------------
@@ -28,6 +33,9 @@ public class Customer extends User{
         return customerID;
     }
 
+    public LocalDate getReturnDate(){
+        return returnDate;
+    }
                                                                                             //Setters-------------------
 
     public void setCustomerID(String customerID){
@@ -39,7 +47,7 @@ public class Customer extends User{
     public void borrowBook(String title, String author, LocalDate borrowDate, int nrOfDays) {
         this.lines.clear();
         boolean bookFoundAndBorrowed = false; // Flag to track success
-
+        returnDate = borrowDate.plusDays(nrOfDays);
 
         try (BufferedReader reader = new BufferedReader(new FileReader("books.txt"))) {
             String line;
@@ -166,6 +174,8 @@ public class Customer extends User{
             System.out.println("File not found!");
         }
     }
+
+
 
 
 }

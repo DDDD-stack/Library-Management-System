@@ -8,68 +8,76 @@ public class LogIn {
 
                                                                                             //LogIn method---------------
 
-    public static void LogIn(String userName, String password){
+    public static void LogInCustomer(String userName, String password) {
         boolean found = false; //will be used as verification if the user is found or not
 
         //Check the users file--------
-        try(BufferedReader br = new BufferedReader(new FileReader("customers.txt"))){
+        try (BufferedReader br = new BufferedReader(new FileReader("customers.txt"))) {
             String line;
 
-            while((line = br.readLine()) != null){
+            while ((line = br.readLine()) != null) {
                 //Seperate the line into parts to make it easier to find specific values
                 String[] parts = line.split(",");
 
+                String CName = parts[0].split(":")[1].trim();
+                String CPass = parts[1].split(":")[1].trim();
+                String CEmail = parts[2].split(":")[1].trim();
+                String CcustomerID = parts[3].split(":")[1].trim();
+                String CStatus = parts[4].split(":")[1].trim();
+
+
                 //Check username and password for a match
-                if (parts[0].contains(userName) && parts[1].contains(password)){
+                if (parts[0].contains(userName) && parts[1].contains(password)) {
                     found = true;
 
                     //Create the customer constructor to use as the user
-                    Main.currentUser = new Customer(parts[0], parts[1], parts[2], parts[3]);
-                    for(int i=0;i< parts.length;i++) {
-                        String[] parts2 = parts[i].split(":");
-                        System.out.println("Logged in! Welcome back: "+ parts2[1].trim());
-                        break;
-                    }
+                    Main.currentUser = new Customer(CName, CPass, CEmail, CcustomerID, CStatus);
 
+                    String[] parts2 = parts[0].split(":");
+                    System.out.println("Logged in! Welcome back: " + parts2[1].trim());
+                      break;
+
+                } else {
+                    System.out.println("Invalid username or password");
                 }
-            }
 
-        }catch(IOException e){
+            }
+        }catch (IOException e) {
             System.out.println("File not found!");
         }
-
+    }
         //If not found int the users file then check the admins file same steps apply here
-        if(!found){
+        public static void LogInAdmin(String userName, String password) {
+        boolean found = false;
             try(BufferedReader br = new BufferedReader(new FileReader("admins.txt"))){
                 String line;
 
                 while((line = br.readLine()) != null){
                     String[] parts = line.split(",");
 
+                    String CName = parts[0].split(":")[1].trim();
+                    String CPass = parts[1].split(":")[1].trim();
+                    String CEmail = parts[2].split(":")[1].trim();
+                    String CAdminID = parts[3].split(":")[1].trim();
+                    String CStatus = parts[4].split(":")[1].trim();
+
                     if(parts[0].equals(userName) && parts[1].equals(password)){
                         found = true;
 
-                        Main.currentUser = new Customer(parts[0], parts[1], parts[2], parts[3]);
-                        for(int i=0;i< parts.length;i++) {
-                              String[] parts2 = parts[i].split(":");
+                        Main.currentUser = new Customer(CName, CPass, CEmail, CAdminID, CStatus);
+
+                              String[] parts2 = parts[0].split(":");
                             System.out.println("Logged in! Welcome back: " + parts2[1].trim());
-                            break;
-                        }
+                        break;
+                    }
+                    else {
+                        System.out.println("Invalid username or password");
                     }
                 }
             }catch(IOException e){
                 System.out.println("File not found!");
             }
         }
-
-        if(!found){
-            System.out.println("User not found!");
-        }
-
-    }
-    
-
-
 
                                                                                             //Log Out method---------------
 
