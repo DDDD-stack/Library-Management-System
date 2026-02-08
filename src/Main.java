@@ -9,7 +9,7 @@ public class Main{
         ConsoleUI console = new ConsoleUI();
         File file = new File("borrowed.txt");
 
-        console.ConsoleUI();
+        console.ConsoleUi();
 
         //Nuk krijohet file i ri kur ban borrow (E ke ke Book metoden)
 

@@ -102,10 +102,11 @@ public class Book{
 
     public void returnBook(String title, String author){}
 
+    /*  fix later
     public String borrowString(){
         return "Customer: " +   " Borrowed: " + title + " Borrow Date: " + borrowDate + " Return Date: " + returnDate;          //unfinished
     }
-
+*/
     @Override
     public String toString(){
         return "Book title is: " + title + "," + " Author is: " + author + "," + " ISBN is: " + ISBN + "," + " Genre: " + genre + "," + " Published in: " + publicationYear + "," + " Availability: " + available + "\n";

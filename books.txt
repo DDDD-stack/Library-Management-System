@@ -3,3 +3,5 @@ Book title is: Mobi Dick, Author is: someone, ISBN is: U81243663P, Genre: advent
 
 Book title is: Naruto, Author is: Masashi Kishimoto, ISBN is: U82943143P, Genre: manga, Published in: 2001, Availability: false
 
+Book title is: Mobi Dick, Author is: Filani, ISBN is: P8923477L, Genre: Fantasy, Published in: 1993, Availability: true
+

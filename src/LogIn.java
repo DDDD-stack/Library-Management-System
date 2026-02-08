@@ -71,7 +71,6 @@ public class LogIn {
 
 
 
-
                                                                                             //Log Out method---------------
 
     public static void LogOut(){
