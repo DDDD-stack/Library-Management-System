@@ -8,6 +8,7 @@ public abstract class User {
     protected String userName;
     protected String password;
     protected String email;
+    protected String phoneNumber;
     protected String role;
 
 
@@ -26,9 +27,10 @@ public abstract class User {
     //Constructors---------
     public User(){};
 
-    public User(String userName, String password, String email){
+    public User(String userName, String password, String email, String phoneNumber){
         this.userName = userName;
         this.password = password;
+        this.phoneNumber = phoneNumber;
         this.email = email;
     }
 

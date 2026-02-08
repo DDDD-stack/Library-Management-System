@@ -8,7 +8,7 @@ public class UserRegistration {
 
     Administrator admin = new Administrator();
 
-    public void registerCustomer(String userName, String password, String email){
+    public void registerCustomer(String userName, String password, String email, String phoneNumber, String membershipType){
         boolean usernameTaken = false;
 
         try(BufferedReader reader = new BufferedReader(new FileReader("customers.txt"))){
@@ -29,8 +29,9 @@ public class UserRegistration {
         }else {
 
             String customerID = UUID.randomUUID().toString();
+            String membershipID = UUID.randomUUID().toString();
 
-            Customer customer = new Customer(userName, password, email, customerID);
+            Customer customer = new Customer(userName, password, email, phoneNumber, customerID, membershipID, membershipType);
 
 
             //Write the  new user information on file
@@ -47,11 +48,11 @@ public class UserRegistration {
         }
     }
 
-    public void registerAdmin(String userName, String password, String email){
+    public void registerAdmin(String userName, String password, String phoneNumber, String email){
 
             String adminId = UUID.randomUUID().toString();
 
-            Administrator admin = new Administrator(userName, password, email, adminId);
+            Administrator admin = new Administrator(userName, password, email, phoneNumber, adminId);
 
             try (BufferedWriter br = new BufferedWriter(new FileWriter("admins.txt", true))) {
 
@@ -63,14 +64,6 @@ public class UserRegistration {
             } catch (IOException e) {
                 System.out.println("File not found: " + e.getMessage());
             }
-    }
-
-    public void switchToAdmin(){
-
-    }
-
-    public void switchToUser(){
-
     }
 
     public void checkAdminPass(String adminPass){

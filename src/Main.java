@@ -2,7 +2,7 @@ import java.io.File;
 
 
 public class Main{
-    public static Customer currentUser=null;
+    public static  User currentUser=null;
     public static void main(String[] args){
         ConsoleUI console = new ConsoleUI();
         File file = new File("borrowed.txt");

@@ -6,6 +6,7 @@ public class Administrator extends User{
     private String adminID;
     private String adminPass = "admin123";
 
+
     /*
     Fine method
 Add book method
@@ -19,10 +20,16 @@ Add book method
     public Administrator(){
     }
 
-    public Administrator(String userName, String password, String email, String adminID){
-        super(userName,password,email);
-        this.adminID = adminID;
+    public Administrator(String userName, String password, String email, String phoneNumber, String adminID){
+        super(userName, password, email, phoneNumber);
+        this.adminID= adminID;
         this.role = "Administrator";
+    }
+
+    public Administrator(String userName, String password, String email, String phoneNumber, String adminID, String role){
+        super(userName,password,email,phoneNumber);
+        this.adminID = adminID;
+        this.role = role;
     }
 
 

@@ -22,19 +22,6 @@ public class Book{
 
     public Book(){ //No-arg constructor
 
-        /*
-        Filter method
-
-
-
-
-        */
-
-
-//removed user name
-// removed the extends user
-//removed the borrow book constructor not needed
-
     }
 
 
@@ -97,16 +84,6 @@ public class Book{
         this.available = available;
     }
 
-                                                                                                                                                //Methods----------------
-
-
-    public void returnBook(String title, String author){}
-
-    /*  fix later
-    public String borrowString(){
-        return "Customer: " +   " Borrowed: " + title + " Borrow Date: " + borrowDate + " Return Date: " + returnDate;          //unfinished
-    }
-*/
     @Override
     public String toString(){
         return "Book title is: " + title + "," + " Author is: " + author + "," + " ISBN is: " + ISBN + "," + " Genre: " + genre + "," + " Published in: " + publicationYear + "," + " Availability: " + available + "\n";
@@ -115,6 +92,3 @@ public class Book{
 
 
 }
-
-
-

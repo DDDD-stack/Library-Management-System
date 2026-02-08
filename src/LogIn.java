@@ -22,8 +22,11 @@ public class LogIn {
                 String CName = parts[0].split(":")[1].trim();
                 String CPass = parts[1].split(":")[1].trim();
                 String CEmail = parts[2].split(":")[1].trim();
-                String CcustomerID = parts[3].split(":")[1].trim();
-                String CStatus = parts[4].split(":")[1].trim();
+                String CPnumber = parts[3].split(":")[1].trim();
+                String CcustomerID = parts[4].split(":")[1].trim();
+                String CMembershipID = parts[5].split(":")[1].trim();
+                String CMembershiptType = parts[6].split(":")[1].trim();
+                String CRole = parts[7].split(":")[1].trim();
 
 
                 //Check username and password for a match
@@ -31,8 +34,8 @@ public class LogIn {
                     found = true;
 
                     //Create the customer constructor to use as the user
-                    Main.currentUser = new Customer(CName, CPass, CEmail, CcustomerID, CStatus);
-
+                    Customer customer = new Customer(CName, CPass, CEmail, CPnumber, CcustomerID, CMembershipID, CMembershiptType,CRole);
+                    Main.currentUser=customer;
                     String[] parts2 = parts[0].split(":");
                     System.out.println("Logged in! Welcome back: " + parts2[1].trim());
                       break;
@@ -64,8 +67,8 @@ public class LogIn {
                     if(parts[0].equals(userName) && parts[1].equals(password)){
                         found = true;
 
-                        Main.currentUser = new Customer(CName, CPass, CEmail, CAdminID, CStatus);
-
+                        Administrator admin = new Administrator(CName, CPass, CEmail, CAdminID, CStatus);
+                        Main.currentUser=admin;
                               String[] parts2 = parts[0].split(":");
                             System.out.println("Logged in! Welcome back: " + parts2[1].trim());
                         break;
