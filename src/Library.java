@@ -5,33 +5,45 @@ public class Library {
 
     // 1. Helper: Load all books from file into a list
     public ArrayList<Book> getAllBooks() {
-        ArrayList<Book> books = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader("books.txt"))) {
+        ArrayList<Book> bookList = new ArrayList<>();
+
+        try (java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.FileReader("books.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
+                // Skip empty lines to prevent crashes
                 if (line.trim().isEmpty()) continue;
 
+                // Split by the comma separator
                 String[] parts = line.split(",");
-                if (parts.length < 6) continue;
 
-                String title = parts[0].replace("Title:", "").trim();
-                String author = parts[1].replace("Author:", "").trim();
-                String isbn = parts[2].replace("ISBN:", "").trim();
-                String genre = parts[3].replace("Genre:", "").trim();
+                // We expect at least 6 parts (Title, Author, ISBN, Genre, Year, Availability)
+                if (parts.length >= 6) {
+                    try {
+                        // Extract value AFTER the colon (:) to remove labels like "Book title is:"
+                        String title = parts[0].substring(parts[0].indexOf(":") + 1).trim();
+                        String author = parts[1].substring(parts[1].indexOf(":") + 1).trim();
+                        String isbn = parts[2].substring(parts[2].indexOf(":") + 1).trim();
+                        String genre = parts[3].substring(parts[3].indexOf(":") + 1).trim();
 
-                int year = 0;
-                try {
-                    year = Integer.parseInt(parts[4].replaceAll("[^0-9]", ""));
-                } catch (Exception e) { year = 0; }
+                        // Parse numbers and booleans
+                        String yearStr = parts[4].substring(parts[4].indexOf(":") + 1).trim();
+                        int year = Integer.parseInt(yearStr);
 
-                boolean isAvailable = parts[5].toLowerCase().contains("true");
+                        String availStr = parts[5].substring(parts[5].indexOf(":") + 1).trim();
+                        boolean isAvailable = Boolean.parseBoolean(availStr);
 
-                books.add(new Book(title, author, genre, isbn, year, isAvailable));
+                        // Create clean Book object
+                        bookList.add(new Book(title, author, genre, isbn, year, isAvailable));
+
+                    } catch (Exception e) {
+                        System.out.println("Skipping corrupted line: " + line);
+                    }
+                }
             }
-        } catch (IOException e) {
-            System.out.println("System: Could not load library. " + e.getMessage());
+        } catch (java.io.IOException e) {
+            System.out.println("Error reading library file.");
         }
-        return books;
+        return bookList;
     }
 
     //Filter by Genre

@@ -107,16 +107,45 @@ public class Administrator extends User{
         this.adminPass = password;
     }
 
-    public void addBook(String title, String author, String genre, String ISBN, int year){
+    public void addBook(String title, String author, String genre, String ISBN, int year) {
 
-        Book book = new Book(title, author, genre, ISBN, year, true);
+        try (java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.FileReader("books.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
 
-        try(BufferedWriter fw = new BufferedWriter(new FileWriter("books.txt", true))){
-            fw.write(book.toString());
+                if (line.contains("ISBN is: " + ISBN)) {
 
-            fw.write("\n");
-        }catch(IOException e){
-            System.out.println("File not found: " + e.getMessage());
+                    System.out.println("Error: A book with ISBN " + ISBN + " already exists!");
+
+                    return;
+
+                }
+            }
+        } catch (java.io.IOException e) {
+
+            System.out.println("Error reading books file.");
+
+        }
+
+
+        try (java.io.BufferedWriter writer = new java.io.BufferedWriter(new java.io.FileWriter("books.txt", true))) {
+
+
+            String entry = "Book title is: " + title +
+                    ", Author is: " + author +
+                    ", ISBN is: " + ISBN +
+                    ", Genre: " + genre +
+                    ", Published in: " + year +
+                    ", Availability: true";
+
+            writer.write(entry);
+
+            writer.newLine();
+
+            System.out.println("Success: Book '" + title + "' added.");
+
+        } catch (java.io.IOException e) {
+            System.out.println("Error writing to books file.");
         }
     }
 
