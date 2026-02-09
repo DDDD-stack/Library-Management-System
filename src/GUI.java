@@ -344,6 +344,16 @@ public class GUI extends Application {
 
         }
 
+        //invoice button
+        if (Main.currentUser instanceof Administrator) {
+
+
+        Button btnInvoice = new Button("Generate Invoice");
+        btnInvoice.setMaxWidth(Double.MAX_VALUE);
+        btnInvoice.setOnAction(e -> showInvoiceDialog());
+        buttons.getChildren().add(btnInvoice);
+    }
+
         // log out button
         Button btnLogout = new Button("Log Out");
 
@@ -670,6 +680,41 @@ public class GUI extends Application {
         });
     }
 
+    private void showInvoiceDialog() {
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Generate Invoice");
+        dialog.setHeaderText("Enter Fine Details");
+
+        GridPane grid = createGrid();
+
+        TextField tUser = new TextField();
+        tUser.setPromptText("Customer Username");
+
+
+        TextField tAmount = new TextField();
+        tAmount.setPromptText("Amount (e.g., 5.00)");
+
+        grid.addRow(0, new Label("Customer:"), tUser);
+        grid.addRow(1, new Label("Amount ($):"), tAmount);
+
+        dialog.getDialogPane().setContent(grid);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        dialog.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                try {
+                    String user = tUser.getText();
+                    double amount = Double.parseDouble(tAmount.getText());
+
+                    // This prints the invoice to the GUI console
+                    adminTools.generateInvoice(user, amount);
+
+                } catch (NumberFormatException e) {
+                    System.out.println("Error: Invalid Amount entered.");
+                }
+            }
+        });
+    }
 
     private void printList(ArrayList<Book> list) {
 

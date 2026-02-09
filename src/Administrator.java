@@ -89,6 +89,10 @@ public class Administrator extends User{
         return adminID;
     }
 
+//    public String getUserName(){
+//        return userName;
+//    }
+
     public String getAdminPass(){
         return adminPass;
     }
@@ -235,6 +239,24 @@ public class Administrator extends User{
         }
     }
 
+
+    public void generateInvoice(String customerName, double amount) {
+        String invoiceID = "INV-" + System.currentTimeMillis();
+        LocalDate date = LocalDate.now();
+        String issuerName;
+        if (Main.currentUser != null) {
+            issuerName = Main.currentUser.getUserName();
+        } else {
+            issuerName = "Unknown Admin";
+        }
+
+        System.out.println("Invoice ID:   " + invoiceID);
+        System.out.println("Date:         " + date);
+        System.out.println("Issued By:    " + issuerName + " (Admin)");
+        System.out.println("Bill To:      " + customerName);
+        System.out.println("Description:  Subscription Payment");
+        System.out.printf("Total Amount: $%.2f%n", amount);
+    }
 
 
     @Override
