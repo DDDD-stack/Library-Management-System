@@ -270,7 +270,7 @@ public class Customer extends User{
                              }
                             else {
 
-                                LocalDate newDate = currentReturnDate.plusDays(7);
+                                LocalDate newDate = currentReturnDate.plusDays(3);
 
                                 parts[returnDateIndex] = " Return Date: " + newDate;
 

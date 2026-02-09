@@ -1,3 +1,2 @@
-Book title is: Mobi Dick, Author is: Filani, ISBN is: U81243663P, Genre: Fighting, Published in: 1993, Availability: true
-Book title is: Naruto, Author is: Masashi Kishimoto, ISBN is: U82943143P, Genre: manga, Published in: 2001, Availability: true
-Book title is: Mobi Dick, Author is: Filani, ISBN is: P8923477L, Genre: Fighting, Published in: 1993, Availability: true
+Book title is: Naruto, Author is: Masashi Kishimoto, ISBN is: U82943143P, Genre: manga, Published in: 2001, Availability: false
+Book title is: Harry Potter, Author is: Filan Fisteku, ISBN is: I0573456P, Genre: Fantasy, Published in: 2001, Availability: true
