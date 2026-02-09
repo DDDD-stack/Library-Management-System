@@ -268,23 +268,85 @@ public class Administrator extends User{
         }
     }
 
+    // Helper method to check if a user exists in a file
+    private boolean isUserInFile(String filename, String username) {
+        try (java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.FileReader(filename))) {
+            String line;
 
-    public void generateInvoice(String customerName, double amount) {
-        String invoiceID = "INV-" + System.currentTimeMillis();
-        LocalDate date = LocalDate.now();
-        String issuerName;
-        if (Main.currentUser != null) {
-            issuerName = Main.currentUser.getUserName();
-        } else {
-            issuerName = "Unknown Admin";
+            while ((line = reader.readLine()) != null) {
+
+                if (line.contains("Username: " + username)) {
+
+                    return true;
+
+                }
+            }
+
+        } catch (java.io.IOException e) { }
+
+        return false;
+    }
+
+
+       public void generateInvoice(String customerName, double amount) {
+
+        if (isUserInFile("admins.txt", customerName)) {
+
+            System.out.println("Error: Cannot issue an invoice to an Administrator!");
+
+            return;
+
+        }
+        if (!isUserInFile("customers.txt", customerName)) {
+
+            System.out.println("Error: Customer '" + customerName + "' not found in database.");
+
+            return;
         }
 
+        String invoiceID = "INV-" + System.currentTimeMillis();
+
+        LocalDate date = LocalDate.now();
+
+        String issuerName = (Main.currentUser != null) ? Main.currentUser.getUserName() : "Unknown Admin";
+
+        System.out.println("       LIBRARY INVOICE               ");
+
         System.out.println("Invoice ID:   " + invoiceID);
+
         System.out.println("Date:         " + date);
+
         System.out.println("Issued By:    " + issuerName + " (Admin)");
+
+        System.out.println("-------------------------------------");
+
         System.out.println("Bill To:      " + customerName);
+
         System.out.println("Description:  Subscription Payment");
-        System.out.printf("Total Amount: $%.2f%n", amount);
+
+        System.out.println("-------------------------------------");
+
+        System.out.printf("TOTAL AMOUNT: $%.2f%n", amount);
+
+
+        try (java.io.BufferedWriter writer = new java.io.BufferedWriter(new java.io.FileWriter("invoices.txt", true))) {
+
+
+            String fileEntry = "Invoice ID: " + invoiceID +
+                    ", Date: " + date +
+                    ", Issuer: " + issuerName +
+                    ", Customer: " + customerName +
+                    ", Amount: " + amount;
+
+            writer.write(fileEntry);
+
+            writer.newLine();
+
+            System.out.println(">> Record saved to 'invoices.txt'");
+
+        } catch (java.io.IOException e) {
+            System.out.println("Error saving invoice to file.");
+        }
     }
 
 
