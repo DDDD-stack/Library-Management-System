@@ -11,16 +11,16 @@ public class ConsoleUI {
         Scanner sc = new Scanner(System.in);
         UserRegistration user = new UserRegistration();
         Administrator adminConstructor = new Administrator();
-        //Book bookConstructor = new Book();   per ca duhet kjo??
+        Library library = new Library();
+
 
         //    Menu ----------------------
 
-        //Keep the login the same but make special id for employ and user EX: Userid: U1,U2.....   EmployeeID: E1,E2.......
         System.out.println("1. Register.\n" +
                            "2. Log In");
 int choice1;
 
-        logInLoop: while(Main.currentUser == null) {
+        while(Main.currentUser == null) {
             choice1=sc.nextInt();
             switch (choice1) {
                 case 1: {
@@ -68,14 +68,11 @@ int choice1;
                                     memType="Standart";
                                     }
                             }
-
                             user.registerCustomer(customerName, customerPassword, customerEmail, customerPhoneNumber, memType);
-
                             break;
 
 
                         //Register as an Admin------------------
-
 
                         case 2:
                             System.out.println("Enter admin password: ");
@@ -93,7 +90,7 @@ int choice1;
                                 String adminPhoneNumber = sc.nextLine();
 
                                 user.registerAdmin(adminName, adminPassword, adminEmail, adminPhoneNumber);
-                            }else if (!user.getPassed()){
+                            }else {
                                 System.out.println("Invalid input!");
                             }
 
@@ -145,6 +142,9 @@ int choice1;
                 System.out.println("7. Search for book");   //complete
                 System.out.println("8. Show current user profile");//complete
                 System.out.println("9. Update Book");
+                System.out.println("10. Check Overdue Fines");
+                System.out.println("11. Search users");
+                System.out.println("12. Borrow time extend request");
                 System.out.println("0. Exit");    //complete
 
                 System.out.println("Enter your choice: ");
@@ -158,6 +158,7 @@ int choice1;
 
 
                     case 1: {
+                        Administrator admin = (Administrator) Main.currentUser;
                         System.out.println("Enter Book Title: ");
                         String title = sc.nextLine();
 
@@ -206,12 +207,14 @@ int choice1;
                         break;
                     }
                     case 4: {
+                        Administrator admin = (Administrator) Main.currentUser;
                         System.out.println("Enter Book title: ");
                         String bookTitle = sc.nextLine();
                         System.out.println("Enter Book Author: ");
                         String bookAuthor = sc.nextLine();
 
                         adminConstructor.removeBook(bookTitle, bookAuthor);
+                        break;
                     }
                     case 5: {
 
@@ -230,76 +233,47 @@ int choice1;
                         System.out.println("1. Filter by genre");
                         System.out.println("2. Filter by year");
                         System.out.println("3. Filter by available");
-                        int filter = sc.nextInt();
-                        sc.nextLine(); // Consume newline
 
-                        // 1. LOAD THE DATA ONCE
-                        ArrayList<Book> allBooks = loadBooksFromFile();
+                        if (sc.hasNextInt()) {
+                            int filter = sc.nextInt();
+                            sc.nextLine(); // Consume newline
 
-                        switch (filter) {
-                            // --- Filter by Genre ---
-                            case 1:
-                                System.out.println("Enter genre: ");
-                                String inputGenre = sc.nextLine().trim();
+                            ArrayList<Book> results = new ArrayList<>();
 
-                                try (BufferedReader reader = new BufferedReader(new FileReader("books.txt"))) {
-                                    String line;
-                                    while ((line = reader.readLine()) != null) {
+                            switch (filter) {
+                                case 1:
+                                    System.out.println("Enter genre: ");
+                                    String g = sc.nextLine();
+                                    results = library.filterByGenre(g);
+                                    break;
+                                case 2:
+                                    System.out.println("Enter start year: ");
+                                    int start = sc.nextInt();
+                                    System.out.println("Enter end year: ");
+                                    int end = sc.nextInt();
+                                    sc.nextLine();
+                                    results = library.filterByYear(start, end);
+                                    break;
+                                case 3:
+                                    results = library.getAvailableBooks();
+                                    break;
+                                default:
+                                    System.out.println("Invalid filter choice.");
+                            }
 
-                                        //Skips empty line------------------
-                                        if (line.trim().isEmpty()) {
-                                            continue;
-                                        }
-
-                                        String[] parts = line.split(",");
-
-                                        //checks if all parts are there-----------
-                                        if (parts.length < 4) {
-                                            continue;             //Skip the incorrect line and go to the next one----------
-                                        }
-
-                                        String Genrename = parts[3];
-
-                                        //Clean and Compare--------
-                                        String fileGenre = Genrename.replace("Genre:", "").trim();
-
-                                        if (fileGenre.equalsIgnoreCase(inputGenre)) {
-                                            System.out.println(line);
-                                        }
-                                    }
-                                } catch (IOException e) {
-                                    System.out.println("Error reading file: " + e.getMessage());
+                            // Print Results
+                            if (results.isEmpty()) {
+                                System.out.println("No books found.");
+                            } else {
+                                System.out.println("\n--- Search Results ---");
+                                for (Book b : results) {
+                                    System.out.println(b.toString());
                                 }
-                                break;
-
-                            // --- Filter by Year ---
-                            case 2:
-                                System.out.println("Enter start year: ");
-                                int startYear = sc.nextInt();
-                                System.out.println("Enter end year: ");
-                                int endYear = sc.nextInt();
-                                sc.nextLine();
-
-                                for (Book b : allBooks) {
-                                    if (b.getPublicationYear() >= startYear && b.getPublicationYear() <= endYear) {
-                                        System.out.println(b);
-                                    }
-                                }
-                                break;
-
-                            // --- Filter by Availability ---
-                            case 3:
-                                System.out.println("--- Available Books ---");
-                                for (Book b : allBooks) {
-                                    if (b.isAvailable()) {
-                                        System.out.println(b);
-                                    }
-                                }
-                                break;
-
-                            default:
-                                System.out.println("Invalid choice!");
-                                break;
+                                System.out.println("----------------------\n");
+                            }
+                        } else {
+                            sc.nextLine(); // Clear bad input
+                            System.out.println("Invalid input.");
                         }
                         break;
                     }
@@ -397,7 +371,64 @@ int choice1;
                         break;
                         }
 
+                    case 10: {
+                        if (Main.currentUser instanceof Administrator) {
+                            Administrator admin = (Administrator) Main.currentUser;
+                            admin.calculateOverdueFines();
+                        } else {
+                            System.out.println("Access Denied: Only Administrators can check fines.");
+                        }
+                        break;
+                    }
 
+                    case 11: {
+
+                        System.out.println("Enter user name: ");
+                        String keyword = sc.nextLine();
+
+                            try(BufferedReader br = new BufferedReader(new FileReader("customers.txt"))){
+                                String line;
+
+                                while((line = br.readLine()) != null){
+                                    String[] parts = line.split(",");
+
+                                    if(parts[0].equalsIgnoreCase("Username: " + keyword)){
+                                        System.out.println(line);
+                                    }
+                                }
+                            }catch(IOException e){
+                                System.out.println("File not found: " + e.getMessage());
+                            }
+
+                        try(BufferedReader br = new BufferedReader(new FileReader("admins.txt"))){
+                            String line;
+
+                            while((line = br.readLine()) != null){
+                                String[] parts = line.split(",");
+                                if(parts[0].equalsIgnoreCase("Username: " + keyword)){
+                                    System.out.println(line);
+                                }
+                            }
+                        }catch(IOException e){
+                            System.out.println("File not found: " + e.getMessage());
+                        }
+                        break;
+                    }
+
+                    // Inside ConsoleUI switch(choice)
+
+                    case 12: {
+                        if (Main.currentUser instanceof Customer) {
+                            System.out.println("Enter the title of the book you want to extend: ");
+                            String titleToExtend = sc.nextLine();
+
+                            Customer customer = (Customer) Main.currentUser;
+                            customer.requestExtension(titleToExtend);
+                        } else {
+                            System.out.println("Only Customers can perform this action.");
+                        }
+                        break;
+                    }
                     //Exit loop
 
 

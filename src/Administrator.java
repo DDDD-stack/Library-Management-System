@@ -3,12 +3,68 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.time.LocalDate;
+import java.io.*;
 
 public class Administrator extends User{
     private String adminID;
     private String adminPass = "admin123";
 
-    
+    public void calculateOverdueFines() {
+        double finePerDay = 0.50;
+        boolean foundOverdue = false;
+        LocalDate today = LocalDate.now();
+
+        System.out.println("Current Date: " + today);
+
+        try (BufferedReader reader = new BufferedReader(new FileReader("borrowed.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.trim().isEmpty()) continue;
+                String[] parts = line.split(",");
+                String returnDateString = null;
+                String username = "Unknown";
+                String title = "Unknown";
+
+                for (String part : parts) {
+                    String p = part.trim();
+                    if (p.startsWith("Return Date:")) {
+                        returnDateString = p.substring("Return Date:".length()).trim();
+                    } else if (p.startsWith("Username:")) {
+                        username = p.substring("Username:".length()).trim();
+                    } else if (p.startsWith("Title:")) {
+                        title = p.substring("Title:".length()).trim();
+                    }
+                }
+
+                if (returnDateString != null) {
+                    try {
+                        LocalDate returnDate = LocalDate.parse(returnDateString);
+
+                        if (today.isAfter(returnDate)) {
+                            long daysOverdue = today.toEpochDay() - returnDate.toEpochDay();
+                            double totalFine = daysOverdue * finePerDay;
+
+                            System.out.println("User: " + username);
+                            System.out.println("Book: " + title);
+                            System.out.println("Due Date: " + returnDate);
+                            System.out.println("Days Overdue: " + daysOverdue);
+                            System.out.println("Amount: $" + totalFine);
+                            foundOverdue = true;
+                        }
+                    } catch (Exception e) {
+                        System.out.println("Error parsing date for line: " + line);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading borrowed.txt: " + e.getMessage());
+        }
+
+        if (!foundOverdue) {
+            System.out.println("Good news! No books are currently overdue.");
+        }
+    }
 
 
 

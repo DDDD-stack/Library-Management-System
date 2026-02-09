@@ -228,6 +228,112 @@ public class Customer extends User{
 
 
 
+    public void requestExtension(String bookTitle) {
+        ArrayList<String> lines = new ArrayList<>();
+        boolean found = false;
+        boolean updated = false;
+
+        System.out.println("Processing extension request for: " + bookTitle);
+
+        try (BufferedReader reader = new BufferedReader(new FileReader("borrowed.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.trim().isEmpty()) continue;
+
+                if (line.contains(this.getUserName()) && line.contains(bookTitle)) {
+
+                    String[] parts = line.split(",");
+                    String returnDateStr = null;
+                    int returnDateIndex = -1;
+
+                    for (int i = 0; i < parts.length; i++) {
+                        if (parts[i].trim().startsWith("Return Date:")) {
+                            returnDateStr = parts[i].split(":")[1].trim();
+                            returnDateIndex = i;
+                            break;
+                        }
+                    }
+
+                    if (returnDateStr != null) {
+                        try {
+                            LocalDate currentReturnDate = LocalDate.parse(returnDateStr);
+
+                            if (LocalDate.now().isAfter(currentReturnDate)) {
+                                System.out.println("Request Denied: You cannot extend an overdue book. Please return it and pay the fine.");
+                                lines.add(line); // Keep original line
+                            }
+
+                             else if (isBookReserved(bookTitle)) {
+                                 System.out.println("Request Denied: Another user has reserved this book.");
+
+                                 lines.add(line);
+                             }
+                            else {
+
+                                LocalDate newDate = currentReturnDate.plusDays(7);
+
+                                parts[returnDateIndex] = " Return Date: " + newDate;
+
+                                String newLine = String.join(",", parts);
+                                lines.add(newLine);
+                                updated = true;
+                                System.out.println("Success! Return date extended by 7 days to: " + newDate);
+                            }
+                        } catch (Exception e) {
+                            System.out.println("Error parsing date. keeping original record.");
+                            lines.add(line);
+                        }
+                    } else {
+                        lines.add(line);
+                    }
+                    found = true;
+                } else {
+                    lines.add(line);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading borrowed.txt");
+        }
+
+        if (updated) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter("borrowed.txt"))) {
+                for (String l : lines) {
+                    writer.write(l);
+                    writer.newLine();
+                }
+            } catch (IOException e) {
+                System.out.println("Error updating file.");
+            }
+        } else if (!found) {
+            System.out.println("You do not have this book borrowed.");
+        }
+    }
+
+
+    private boolean isBookReserved(String bookTitle) {
+        File file = new File("reservations.txt");
+
+        if (!file.exists()) {
+            return false;
+        }
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.trim().isEmpty()) continue;
+
+                if (line.contains(bookTitle) && !line.contains("Status: Completed")) {
+                    return true;
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error checking reservations.");
+        }
+
+        return false;
+    }
+
+
     @Override
     public String toString(){
         return super.toString() + "," + " Customer ID: " + customerID + "," +"Membership ID: "+ MembershipID+ "," + "Membership Type: " + membershipType + ","+ "Status: " + role;
